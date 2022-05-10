@@ -1,0 +1,14 @@
+prefix=/usr/local/Cellar/ffmpeg/5.0.1
+exec_prefix=${prefix}
+libdir=/usr/local/Cellar/ffmpeg/5.0.1/lib
+includedir=/usr/local/Cellar/ffmpeg/5.0.1/include
+
+Name: libavformat
+Description: FFmpeg container format library
+Version: 59.16.100
+Requires: 
+Requires.private: libavcodec >= 59.18.100, libswresample >= 4.3.100, libavutil >= 57.17.100
+Conflicts:
+Libs: -L${libdir}  -lavformat 
+Libs.private: -lm -lxml2 -lbz2 -L/usr/local/Cellar/libbluray/1.3.1/lib -lbluray -lz -L/usr/local/Cellar/gnutls/3.7.4/lib -lgnutls -L/usr/local/Cellar/librist/0.2.6_1/lib -lrist -L/usr/local/Cellar/srt/1.4.4/lib -lsrt -L/usr/local/Cellar/zeromq/4.3.4/lib -lzmq
+Cflags: -I${includedir}

@@ -43,7 +43,7 @@ int player(){
 
     //YUV文件句柄
     FILE *video_fd=NULL;
-    const char *yuv_path="yuv420p_320x240.yuv";
+    const char *yuv_path="/Users/macbook/Documents/GitHub/Slow_player/Slow_player/build-Slow_play-Desktop_x86_darwin_generic_mach_o_64bit-Debug/yuv420p_320x240.yuv";
     size_t video_buff_len=0;
     uint8_t *video_buf=NULL; //读取数据后先把放到buffer里面
 

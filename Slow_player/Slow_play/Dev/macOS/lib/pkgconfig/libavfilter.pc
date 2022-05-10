@@ -1,0 +1,14 @@
+prefix=/usr/local/Cellar/ffmpeg/5.0.1
+exec_prefix=${prefix}
+libdir=/usr/local/Cellar/ffmpeg/5.0.1/lib
+includedir=/usr/local/Cellar/ffmpeg/5.0.1/include
+
+Name: libavfilter
+Description: FFmpeg audio/video filtering library
+Version: 8.24.100
+Requires: 
+Requires.private: libswscale >= 6.4.100, libpostproc >= 56.3.100, libavformat >= 59.16.100, libavcodec >= 59.18.100, libswresample >= 4.3.100, libavutil >= 57.17.100
+Conflicts:
+Libs: -L${libdir}  -lavfilter 
+Libs.private: -framework OpenGL -framework OpenGL -lm -L/usr/local/Cellar/rubberband/2.0.2/lib -lrubberband -framework Accelerate -lstdc++ -L/usr/local/Cellar/libvmaf/2.3.0_1/lib -lvmaf -pthread -L/usr/local/Cellar/tesseract/5.1.0/lib -L/usr/local/Cellar/libarchive/3.6.0/lib -ltesseract -larchive -lcurl -L/usr/local/Cellar/libass/0.15.2/lib -lass -L/usr/local/Cellar/libvidstab/1.1.0/lib -lvidstab -lm -framework Metal -framework VideoToolbox -L/usr/local/Cellar/zeromq/4.3.4/lib -lzmq -L/usr/local/Cellar/zimg/3.0.3/lib -lzimg -framework CoreImage -framework AppKit -L/usr/local/opt/freetype/lib -L/usr/local/Cellar/fontconfig/2.14.0/lib -lfontconfig -lfreetype -L/usr/local/opt/freetype/lib -lfreetype -framework CoreFoundation -framework CoreMedia -framework CoreVideo -framework CoreServices
+Cflags: -I${includedir}
