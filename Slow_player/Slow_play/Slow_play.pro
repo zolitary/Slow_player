@@ -1,8 +1,9 @@
 QT       += core gui
+QT       += core gui opengl
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-CONFIG += c++17
+CONFIG += c++11
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -11,11 +12,13 @@ CONFIG += c++17
 SOURCES += \
     SDL_YUV_Player.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    videowidget.cpp
 
 HEADERS += \
     SDL_YUV_Player.h \
-    mainwindow.h
+    mainwindow.h \
+    videowidget.h
 
 FORMS += \
     mainwindow.ui
@@ -50,10 +53,8 @@ mac:{
             -lswscale \
             -lswresample
 
-LIBS += $$PWD/SDL2/SDL2_mac/lib/libSDL2-2.0.0.dylib
-INCLUDEPATH += $$PWD/SDL2/SDL2_mac/include
-
-
+    LIBS += $$PWD/SDL2/SDL2_mac/lib/libSDL2-2.0.0.dylib
+    INCLUDEPATH += $$PWD/SDL2/SDL2_mac/include
 
 }
 

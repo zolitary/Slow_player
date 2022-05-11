@@ -5,9 +5,9 @@
 int s_thread_exit_flag=0;
 int main(int argc, char *argv[])
 {
-    player();
+    //player();
     QApplication a(argc, argv);
-    //MainWindow w;
-    //w.show();
+    MainWindow w;
+    w.show();
     return a.exec();
 }
