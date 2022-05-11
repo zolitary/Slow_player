@@ -3,6 +3,10 @@
 
 #include <QWidget>
 
+/*
+ *  显示视频 渲染视频
+ */
+
 class VideoWidget : public QWidget
 {
     Q_OBJECT

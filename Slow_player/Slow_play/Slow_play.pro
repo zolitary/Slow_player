@@ -13,11 +13,15 @@ SOURCES += \
     SDL_YUV_Player.cpp \
     main.cpp \
     mainwindow.cpp \
+    videoplayer.cpp \
+    videoslider.cpp \
     videowidget.cpp
 
 HEADERS += \
     SDL_YUV_Player.h \
     mainwindow.h \
+    videoplayer.h \
+    videoslider.h \
     videowidget.h
 
 FORMS += \
