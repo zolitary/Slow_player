@@ -10,6 +10,8 @@
     if(ret<0){ \
         ERROR_BUF; \
         qDebug()<<#func<<"error"<<errbuf; \
+        setState(Nosource); \
+        emit playFailed(this); \
         goto end; \
     }
 
@@ -68,13 +70,19 @@ void VideoPlayer::setState(State state){
     emit stateChanged(this);
 }
 
+int64_t VideoPlayer::getDuration(){
+     return _FmtCtx ? round(_FmtCtx->duration * av_q2d(AV_TIME_BASE_Q)) : 0;
+}
+
 VideoPlayer::State VideoPlayer::getState(){
     return state_now;
 }
 
-void VideoPlayer::setFilename(const char* filename){
+void VideoPlayer::setFilename(QString filename){
     //_filename=filename;
-    strcpy(_filename,filename);
+    //strcpy(_filename,filename);
+    const char *name = filename.toStdString().c_str();
+    memcpy(_filename, name, strlen(name) + 1);
     //_filename="/Users/macbook/Desktop/极客时间/62-玩转Git三剑客（完结）/02丨安装Git.mp4";
     //qDebug()<<"!!!!!!!!"<<_filename;
 }
@@ -82,6 +90,7 @@ void VideoPlayer::setFilename(const char* filename){
 void VideoPlayer::readFile(){
 
     int ret=0;
+    qDebug()<<"!!!!@@@@@@@@########$$$$$$%%%%%%%%^^^^^^^6";
     //打开文件、创建解封装上下文
     //qDebug()<<"##########"<<_filename;
     ret=avformat_open_input(&_FmtCtx,_filename,nullptr,nullptr);
@@ -106,15 +115,19 @@ void VideoPlayer::readFile(){
         goto end;
     }
 
+    emit initFinished(this);
     //读取数据
-//    AVPacket pkt;
-//    while(av_read_frame(_FmtCtx,&pkt)==0){
-//        if(pkt.stream_index==_aStream->index){
 
-//        }else if(pkt.stream_index==_vStream->index){
+    AVPacket pkt;
+    while(av_read_frame(_FmtCtx,&pkt)==0){
+        if(pkt.stream_index==_aStream->index){
 
-//        }
-//    }
+        }else if(pkt.stream_index==_vStream->index){
+
+        }
+    }
+    //while(1){qDebug()<<1;}
+
 end:
    avcodec_free_context(&_aDecodeCtx);
    avcodec_free_context(&_vDecodeCtx);

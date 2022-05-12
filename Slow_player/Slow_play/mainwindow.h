@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "videoplayer.h"
+#include "videoslider.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -15,9 +16,13 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    QString getTimeText(int value);
 
 private slots:
     void onPlayerStateChanged(VideoPlayer *player);
+    void onPlayerInitFinished(VideoPlayer *player);
+    void onPlayerPlayFailed(VideoPlayer *player);
+
 
     void on_openfileBtn_clicked();
 

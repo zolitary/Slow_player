@@ -46,10 +46,13 @@ public:
     void stop();
     bool isPlaying();
     State getState();
-    void setFilename(const char* filename);
+    void setFilename(QString filename);
+    int64_t getDuration();
 
 signals:
     void stateChanged(VideoPlayer *player);
+    void initFinished(VideoPlayer *player);
+    void playFailed(VideoPlayer *player);
 
 private:
     State state_now=Nosource;

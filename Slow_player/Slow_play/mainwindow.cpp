@@ -4,6 +4,7 @@
 
 #include <QFileDialog>
 #include <QDebug>
+#include <QMessageBox>
 
 
 
@@ -18,11 +19,20 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(_player,&VideoPlayer::stateChanged,
             this,&MainWindow::onPlayerStateChanged);
+    connect(_player,&VideoPlayer::initFinished,
+            this,&MainWindow::onPlayerInitFinished);
+    connect(_player, &VideoPlayer::playFailed,
+            this, &MainWindow::onPlayerPlayFailed);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete _player;
+}
+
+void MainWindow::onPlayerPlayFailed(VideoPlayer *player) {
+    QMessageBox::critical(nullptr, "提示", "哦豁，播放失败！");
 }
 
 
@@ -37,8 +47,10 @@ void MainWindow::on_openfileBtn_clicked()
     if(filename.isEmpty()) return;
 
     //播放
-    _player->setFilename(filename.toUtf8().data());
+    _player->setFilename(filename);
     _player->play();
+
+
 
 
 }
@@ -58,7 +70,7 @@ void MainWindow::onPlayerStateChanged(VideoPlayer *player){
         ui->volumnSlider->setEnabled(false);
         ui->currentSlider->setEnabled(false);
         ui->currentSlider->setValue(0);
-        ui->durationLable->setText("00:00:00");
+        ui->durationLable->setText(getTimeText(0));
         ui->playWidget->setCurrentWidget(ui->openFilePage);
     }else{
         ui->playBtn->setEnabled(true);
@@ -70,9 +82,15 @@ void MainWindow::onPlayerStateChanged(VideoPlayer *player){
     }
 }
 
-void MainWindow::on_currentSlider_valueChanged(int value)
-{
-    ui->currentLable->setText("00:00:00");
+void MainWindow::onPlayerInitFinished(VideoPlayer *player) {
+    int duration = player->getDuration();
+    ui->currentSlider->setRange(0, duration);
+
+    ui->durationLable->setText(getTimeText(duration));
+}
+
+void MainWindow::on_currentSlider_valueChanged(int value) {
+    ui->currentLable->setText(getTimeText(value));
 }
 
 
@@ -98,3 +116,11 @@ void MainWindow::on_playBtn_clicked()
     }
 }
 
+QString MainWindow::getTimeText(int value) {
+
+    QLatin1Char fill = QLatin1Char('0');
+    return QString("%1:%2:%3")
+           .arg(value / 3600, 2, 10, fill)
+           .arg((value / 60) % 60, 2, 10, fill)
+           .arg(value % 60, 2, 10, fill);
+}
