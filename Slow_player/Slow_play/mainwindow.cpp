@@ -1,126 +1,137 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "videowidget.h"
-
 #include <QFileDialog>
 #include <QDebug>
 #include <QMessageBox>
 
-
-
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
-{
+    , ui(new Ui::MainWindow) {
     ui->setupUi(this);
-    ui->volumnSlider->setValue(50);
-    //播放器
-    _player=new VideoPlayer();
 
-    connect(_player,&VideoPlayer::stateChanged,
-            this,&MainWindow::onPlayerStateChanged);
-    connect(_player,&VideoPlayer::initFinished,
-            this,&MainWindow::onPlayerInitFinished);
+    qRegisterMetaType<VideoPlayer::VideoSwsSpec>("VideoSwsSpec&");
+    _player = new VideoPlayer();
+
+    connect(_player, &VideoPlayer::stateChanged,
+            this, &MainWindow::onPlayerStateChanged);
+    connect(_player, &VideoPlayer::timeChanged,
+            this, &MainWindow::onPlayerTimeChanged);
+    connect(_player, &VideoPlayer::initFinished,
+            this, &MainWindow::onPlayerInitFinished);
     connect(_player, &VideoPlayer::playFailed,
             this, &MainWindow::onPlayerPlayFailed);
+    connect(_player, &VideoPlayer::frameDecoded,
+            ui->videoWidget, &VideoWidget::onPlayerFrameDecoded);
+    connect(_player, &VideoPlayer::stateChanged,
+            ui->videoWidget, &VideoWidget::onPlayerStateChanged);
+    connect(ui->timeSlider, &VideoSlider::clicked,
+            this, &MainWindow::onSliderClicked);
+
+    //音量设置
+    ui->volumnSlider->setRange(VideoPlayer::Volumn::Min,VideoPlayer::Volumn::Max);
+    ui->volumnSlider->setValue(ui->volumnSlider->maximum() >> 3);
 }
 
-MainWindow::~MainWindow()
-{
+MainWindow::~MainWindow() {
     delete ui;
     delete _player;
 }
 
+
+void MainWindow::onSliderClicked(VideoSlider *slider) {
+    _player->setTime(slider->value());
+}
+
 void MainWindow::onPlayerPlayFailed(VideoPlayer *player) {
-    QMessageBox::critical(nullptr, "提示", "哦豁，播放失败！");
-}
-
-
-void MainWindow::on_openfileBtn_clicked()
-{
-    QString filename=(QFileDialog::getOpenFileName(nullptr,
-                                                  "选择打开多媒体文件",
-                                                  "/",
-                                                  "视频文件 (*.mp4 *.avi);;音频文件 (*.mp3 *.aac)").toUtf8().data());
-    qDebug()<<filename;
-    //qDebug()<<"fhjghjkgjjgjkkj"<<filename.toUtf8().data();
-    if(filename.isEmpty()) return;
-
-    //播放
-    _player->setFilename(filename);
-    _player->play();
-
-
-
-
-}
-
-void MainWindow::onPlayerStateChanged(VideoPlayer *player){
-    VideoPlayer::State state=player->getState();
-    if(state==VideoPlayer::Playing){
-        ui->playBtn->setText("暂停");
-    }else{
-        ui->playBtn->setText("播放");
-    }
-
-    if(state==VideoPlayer::Nosource){
-        ui->playBtn->setEnabled(false);
-        ui->stopBtn->setEnabled(false);
-        ui->silenceBtn->setEnabled(false);
-        ui->volumnSlider->setEnabled(false);
-        ui->currentSlider->setEnabled(false);
-        ui->currentSlider->setValue(0);
-        ui->durationLable->setText(getTimeText(0));
-        ui->playWidget->setCurrentWidget(ui->openFilePage);
-    }else{
-        ui->playBtn->setEnabled(true);
-        ui->stopBtn->setEnabled(true);
-        ui->silenceBtn->setEnabled(true);
-        ui->volumnSlider->setEnabled(true);
-        ui->currentSlider->setEnabled(true);
-        ui->playWidget->setCurrentWidget(ui->videoPage);
-    }
+    QMessageBox::critical(nullptr, "提示", "哦豁，出现神秘的错误！");
 }
 
 void MainWindow::onPlayerInitFinished(VideoPlayer *player) {
     int duration = player->getDuration();
-    ui->currentSlider->setRange(0, duration);
-
-    ui->durationLable->setText(getTimeText(duration));
+    ui->timeSlider->setRange(0, duration);
+    ui->durationLabel->setText(getTimeText(duration));
 }
 
-void MainWindow::on_currentSlider_valueChanged(int value) {
-    ui->currentLable->setText(getTimeText(value));
+void MainWindow::onPlayerTimeChanged(VideoPlayer *player) {
+    ui->timeSlider->setValue(player->getTime());
 }
 
-
-void MainWindow::on_volumnSlider_valueChanged(int value)
-{
-    ui->volumnLable->setText(QString("%1").arg(value));
-}
-
-
-void MainWindow::on_stopBtn_clicked()
-{
-    _player->stop();
-}
-
-
-void MainWindow::on_playBtn_clicked()
-{
-    VideoPlayer::State state=_player->getState();
-    if(state==VideoPlayer::Playing){
+void MainWindow::onPlayerStateChanged(VideoPlayer *player) {
+    VideoPlayer::State state = player->getState();
+    if (state == VideoPlayer::Playing) {
         ui->playBtn->setText("暂停");
     }else{
         ui->playBtn->setText("播放");
     }
+    if (state == VideoPlayer::Stopped) {
+        //禁止按钮
+        ui->playBtn->setEnabled(false);
+        ui->stopBtn->setEnabled(false);
+        ui->timeSlider->setEnabled(false);
+        ui->volumnSlider->setEnabled(false);
+        ui->muteBtn->setEnabled(false);
+        ui->durationLabel->setText(getTimeText(0));
+        ui->timeSlider->setValue(0);
+        //返回打开文件
+        ui->playWidget->setCurrentWidget(ui->openFilePage);
+    } else {
+        ui->playBtn->setEnabled(true);
+        ui->stopBtn->setEnabled(true);
+        ui->timeSlider->setEnabled(true);
+        ui->volumnSlider->setEnabled(true);
+        ui->muteBtn->setEnabled(true);
+        //进入播放洁面
+        ui->playWidget->setCurrentWidget(ui->videoPage);
+    }
+}
+
+void MainWindow::on_stopBtn_clicked() {
+    _player->stop();
+}
+
+void MainWindow::on_openFileBtn_clicked() {
+    QString filename = QFileDialog::getOpenFileName(nullptr,
+                       "选择多媒体文件",
+                       "/",
+                       "多媒体文件 (*.mp4 *.avi *.mkv *.mp3 *.aac)");
+    if (filename.isEmpty()) return;
+    _player->setFilename(filename);
+    _player->play();
+}
+
+void MainWindow::on_timeSlider_valueChanged(int value) {
+    ui->timeLabel->setText(getTimeText(value));
+}
+
+void MainWindow::on_volumnSlider_valueChanged(int value) {
+    ui->volumnLabel->setText(QString("%1").arg(value));
+    _player->setVolumn(value);
+}
+
+void MainWindow::on_playBtn_clicked() {
+    VideoPlayer::State state = _player->getState();
+    if (state == VideoPlayer::Playing) {
+        _player->pause();
+    } else {
+        _player->play();
+    }
 }
 
 QString MainWindow::getTimeText(int value) {
-
+    //获取XX：XX：XX格式的时间文本
     QLatin1Char fill = QLatin1Char('0');
     return QString("%1:%2:%3")
-           .arg(value / 3600, 2, 10, fill)
-           .arg((value / 60) % 60, 2, 10, fill)
-           .arg(value % 60, 2, 10, fill);
+           .arg(value/3600,2,10,fill)
+           .arg((value/60)%60,2,10,fill)
+           .arg(value%60,2,10,fill);
+}
+
+void MainWindow::on_muteBtn_clicked() {
+    if (_player->isMute()) {
+        _player->setMute(false);
+        ui->muteBtn->setText("静音");
+    } else {
+        _player->setMute(true);
+        ui->muteBtn->setText("声音");
+    }
 }

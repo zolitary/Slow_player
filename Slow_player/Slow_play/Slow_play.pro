@@ -11,14 +11,19 @@ CONFIG += c++11
 
 SOURCES += \
     SDL_YUV_Player.cpp \
+    condmutex.cpp \
     main.cpp \
     mainwindow.cpp \
     videoplayer.cpp \
+    videoplayer_audio.cpp \
+    videoplayer_video.cpp \
     videoslider.cpp \
     videowidget.cpp
 
 HEADERS += \
+    ../../../../../Desktop/sl/audio-video-dev-tutorial-main 2/condmutex.h \
     SDL_YUV_Player.h \
+    condmutex.h \
     mainwindow.h \
     videoplayer.h \
     videoslider.h \

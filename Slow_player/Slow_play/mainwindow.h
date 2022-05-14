@@ -6,38 +6,34 @@
 #include "videoslider.h"
 
 QT_BEGIN_NAMESPACE
-namespace Ui { class MainWindow; }
+namespace Ui {
+    class MainWindow;
+}
 QT_END_NAMESPACE
 
-class MainWindow : public QMainWindow
-{
+class MainWindow : public QMainWindow {
     Q_OBJECT
 
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-    QString getTimeText(int value);
 
 private slots:
-    void onPlayerStateChanged(VideoPlayer *player);
+    void onPlayerStateChanged(VideoPlayer *player);//播放器状态改变
+    void onPlayerTimeChanged(VideoPlayer *player);//进度条
     void onPlayerInitFinished(VideoPlayer *player);
     void onPlayerPlayFailed(VideoPlayer *player);
-
-
-    void on_openfileBtn_clicked();
-
-    void on_currentSlider_valueChanged(int value);
-
-    void on_volumnSlider_valueChanged(int value);
-
+    void onSliderClicked(VideoSlider *slider);//seek
     void on_stopBtn_clicked();
-
+    void on_openFileBtn_clicked();
+    void on_timeSlider_valueChanged(int value);
+    void on_volumnSlider_valueChanged(int value);
     void on_playBtn_clicked();
+    void on_muteBtn_clicked();
 
 private:
     Ui::MainWindow *ui;
     VideoPlayer *_player;
-    const char* _readfilename;//保存主窗口获取的文件名
-
+    QString getTimeText(int value);
 };
 #endif // MAINWINDOW_H

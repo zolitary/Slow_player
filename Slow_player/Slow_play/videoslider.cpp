@@ -1,19 +1,30 @@
 #include "videoslider.h"
-
 #include <QMouseEvent>
+#include <QStyle>
 
-VideoSlider::VideoSlider(QWidget *parent)
-    : QSlider{parent}
-{
+VideoSlider::VideoSlider(QWidget *parent) : QSlider(parent) {
 
 }
 
+void VideoSlider::mousePressEvent(QMouseEvent *ev) {
 
-void VideoSlider::mousePressEvent(QMouseEvent *ev){
-    double ratio=ev->pos().x()*1.0/width();
-    double len=maximum()-minimum();
-    int value=len*ratio+minimum();
+    int value = QStyle::sliderValueFromPosition(minimum(),
+                maximum(),
+                ev->pos().x(),
+                width());
     setValue(value);
 
     QSlider::mousePressEvent(ev);
+    emit clicked(this);
+}
+
+void VideoSlider::mouseMoveEvent(QMouseEvent *ev){
+    int value = QStyle::sliderValueFromPosition(minimum(),
+                maximum(),
+                ev->pos().x(),
+                width());
+    setValue(value);
+
+    QSlider::mouseMoveEvent(ev);
+    emit clicked(this);
 }
