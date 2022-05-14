@@ -161,9 +161,34 @@ void VideoPlayer::decodeVideo() {
             // 把像素格式转换后的图片数据，拷贝一份出来
             uint8_t *data = (uint8_t *) av_malloc(_vSwsOutSpec.size);
             memcpy(data, _vSwsOutFrame->data[0], _vSwsOutSpec.size);
+
+//            // 发现视频的时间是早于seekTime的，直接丢弃
+//            if (_vSeekTime >= 0) {
+////                if(_vSwsOutFrame->pict_type==AV_PICTURE_TYPE_I){
+////                    emit frameDecoded(this, data, _vSwsOutSpec);
+////                    continue;
+////                }
+//                if (_vTime < _vSeekTime) {
+//                    continue;
+//                } else {
+//                    _vSeekTime = -1;
+//                }
+//            }
             // 发出信号
+#if 0
+            /**
+             * Picture type of the frame.
+             */
+            int key_frame;
+
+            /**
+              * Picture type of the frame.
+              */
+            enum AVPictureType pict_type;
+#endif
             emit frameDecoded(this, data, _vSwsOutSpec);
-            qDebug() << "渲染了一帧" << _vTime << _aTime;
+            if(_vSwsInFrame->key_frame)
+                qDebug() << "渲染了一帧" << _vTime << _aTime;
         }
     }
 }

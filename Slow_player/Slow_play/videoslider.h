@@ -14,7 +14,7 @@ signals:
 
 private:
     void mousePressEvent(QMouseEvent *ev) override;
-    void mouseMoveEvent(QMouseEvent *ev) override;
+    //void mouseMoveEvent(QMouseEvent *ev) override;
 };
 
 #endif // VIDEOSLIDER_H

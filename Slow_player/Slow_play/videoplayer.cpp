@@ -129,18 +129,20 @@ void VideoPlayer::readFile() {
         if (_seekTime >= 0) {
             int streamIdx;
             //选择使用流作为时间基准 seek
-#if 0
+#if 1
             if (_hasAudio) {
                 streamIdx = _aStream->index;
             }else{
                 streamIdx = _vStream->index;
             }
 #endif
+#if 0
             if (_hasVideo) {
                 streamIdx = _vStream->index;
             }else{
                 streamIdx = _aStream->index;
             }
+#endif
             AVRational timeBase = _fmtCtx->streams[streamIdx]->time_base;
             int64_t ts = _seekTime / av_q2d(timeBase);
             ret = av_seek_frame(_fmtCtx, streamIdx, ts, AVSEEK_FLAG_BACKWARD);
@@ -176,7 +178,7 @@ void VideoPlayer::readFile() {
             } else if (pkt.stream_index == _vStream->index) {
                 if(_vPktList.empty()){
                     if(!(pkt.flags &AV_PKT_FLAG_KEY)){
-                        continue;
+                        //continue;
                     }
                 }
                 addVideoPkt(pkt);

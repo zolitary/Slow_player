@@ -18,13 +18,13 @@ void VideoSlider::mousePressEvent(QMouseEvent *ev) {
     emit clicked(this);
 }
 
-void VideoSlider::mouseMoveEvent(QMouseEvent *ev){
-    int value = QStyle::sliderValueFromPosition(minimum(),
-                maximum(),
-                ev->pos().x(),
-                width());
-    setValue(value);
+//void VideoSlider::mouseMoveEvent(QMouseEvent *ev){
+//    int value = QStyle::sliderValueFromPosition(minimum(),
+//                maximum(),
+//                ev->pos().x(),
+//                width());
+//    setValue(value);
 
-    QSlider::mouseMoveEvent(ev);
-    emit clicked(this);
-}
+//    QSlider::mouseMoveEvent(ev);
+//    emit clicked(this);
+//}
