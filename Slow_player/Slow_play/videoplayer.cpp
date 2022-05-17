@@ -399,7 +399,7 @@ void VideoPlayer::startPreview() {
                         qDebug() << "seek失败" << _seekTime << ts << streamIdx;
                         _seekTime = -1;
                     } else {
-                        qDebug() << "seek成功" << Time << ts << streamIdx;
+                        //qDebug() << "seek成功" << Time << ts << streamIdx;
                         clearAudioPktList();
                         _vSeekTime = _seekTime;
                         _aSeekTime = _seekTime;

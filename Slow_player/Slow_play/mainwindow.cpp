@@ -38,23 +38,13 @@ MainWindow::MainWindow(QWidget *parent)
             this, &MainWindow::onSliderClicked);
     connect(ui->timeSlider, &VideoSlider::preview,
             this, &MainWindow::onSliderMouseFoucs);
+    connect(ui->timeSlider,&VideoSlider::mouseleave,
+            this,&MainWindow::onMouseLeaveSlider);
 
     //音量设置
     ui->volumnSlider->setRange(VideoPlayer::Volumn::Min,VideoPlayer::Volumn::Max);
     ui->volumnSlider->setValue(ui->volumnSlider->maximum() >> 1);
 
-    std::thread([this](){
-        clock_t start=clock();
-        while( preview!=NULL )
-        {
-            if(clock()-start > 3000)
-            {
-                this->preview->hide();
-                start = clock();
-            }
-        }
-
-    }).detach();
 }
 
 MainWindow::~MainWindow() {
@@ -69,12 +59,16 @@ void MainWindow::onSliderClicked(VideoSlider *slider) {
 }
 void MainWindow::onSliderMouseFoucs(int seektime,int x)
 {
-    qDebug()<<"获取了一次位置";
-    preview->move(x, ui->videoWidget->height() - preview->height() + 20);
+    //qDebug()<<"获取了一次位置";
+    preview->move(x+40, ui->videoWidget->height() - preview->height() + 20);
     preview->show();
     preview_player->setTime(seektime);
 
 
+}
+
+void MainWindow::onMouseLeaveSlider(){
+    preview->hide();
 }
 
 void MainWindow::onPlayerPlayFailed(VideoPlayer *player) {

@@ -36,3 +36,7 @@ void VideoSlider::mouseMoveEvent(QMouseEvent *ev){
     }
     QSlider::mouseMoveEvent(ev);
 }
+
+void VideoSlider::leaveEvent(QEvent *ev){
+    emit mouseleave();
+}

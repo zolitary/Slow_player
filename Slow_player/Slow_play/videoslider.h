@@ -13,10 +13,12 @@ signals:
     /** 点击事件 */
     void clicked(VideoSlider *slider);
     void preview(int seektime, int x);
+    void mouseleave();
 
 private:
     void mouseReleaseEvent(QMouseEvent *ev) override;
     void mouseMoveEvent(QMouseEvent *ev) override;
+    void leaveEvent(QEvent *ev) override;
     clock_t start;
     int x;
 };

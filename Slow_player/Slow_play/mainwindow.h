@@ -32,6 +32,7 @@ private slots:
     void on_volumnSlider_valueChanged(int value);
     void on_playBtn_clicked();
     void on_muteBtn_clicked();
+    void onMouseLeaveSlider();
 
 private:
     Ui::MainWindow *ui;

@@ -187,8 +187,8 @@ void VideoPlayer::decodeVideo() {
             enum AVPictureType pict_type;
 #endif
             emit frameDecoded(this, data, _vSwsOutSpec);
-            if(_vSwsInFrame->key_frame)
-                qDebug() << "渲染了一帧" << _vTime << _aTime;
+            //if(_vSwsInFrame->key_frame)
+                //qDebug() << "渲染了一帧" << _vTime << _aTime;
         }
     }
 }
