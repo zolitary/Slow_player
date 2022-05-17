@@ -32,6 +32,17 @@ void VideoPlayer::play() {
     }
 }
 
+void VideoPlayer::play_preview() {
+    if (_state == Playing) return;
+    if (_state == Stopped) {
+        std::thread([this]() {
+            startPreview();
+        }).detach();
+    } else {
+        setState(Playing);
+    }
+}
+
 void VideoPlayer::pause() {
     if (_state != Playing) return;
     setState(Paused);
@@ -260,6 +271,147 @@ void VideoPlayer::readFile() {
             ERROR_BUF;
             qDebug() << "av_read_frame error" << errbuf;
             continue;
+        }
+    }
+    if (_fmtCtxCanFree) {
+        stop();
+    }else{
+        _fmtCtxCanFree = true;
+    }
+}
+
+void VideoPlayer::startPreview() {
+
+    int ret = 0;
+    //创建解封装上下文、打开文件
+    ret = avformat_open_input(&_fmtCtx, _filename, nullptr, nullptr);
+    END(avformat_open_input);
+
+    //检索流信息
+    ret = avformat_find_stream_info(_fmtCtx, nullptr);
+    END(avformat_find_stream_info);
+
+    //打印流信息
+    av_dump_format(_fmtCtx, 0, _filename, 0);
+    fflush(stderr);
+
+    //抛弃音频
+    _hasAudio = false;
+
+    //初始化视频信息
+    _hasVideo = initVideoInfo() >= 0;
+    if (!_hasAudio && !_hasVideo) {
+        fataError();
+        return;
+    }
+
+    emit initFinished(this);
+
+    setState(Playing);
+
+
+    //视频解码
+    std::thread([this]() {
+        decodeVideo();
+    }).detach();
+
+    //从输入文件中读取数据
+    AVPacket pkt,keypkt,temp;
+    while (_state != Stopped) {
+        //处理seek操作
+        if (_seekTime >= 0) {
+            int streamIdx;
+            //选择使用流作为时间基准 seek
+            if (_hasVideo) {
+                streamIdx = _vStream->index;
+            }else{
+                return;
+            }
+
+            //定位到seekTime前20秒
+            AVRational timeBase = _fmtCtx->streams[streamIdx]->time_base;
+            int64_t ts;
+            ts = (_seekTime < 20 ? 0 : _seekTime - 20) / av_q2d(timeBase);
+
+            ret = av_seek_frame(_fmtCtx, streamIdx, ts, AVSEEK_FLAG_BACKWARD);
+            if (ret < 0) { // seek失败
+                qDebug() << "seek失败" << _seekTime << ts << streamIdx;
+                _seekTime = -1;
+            } else {
+
+                // 清空数据包
+                clearAudioPktList();
+                clearVideoPktList();
+                double Time = 0;
+
+                // 获取最近关键帧
+                av_read_frame(_fmtCtx, &temp);
+                while(1){
+                    ret = av_read_frame(_fmtCtx, &keypkt);
+                    if (ret == 0) {
+                        if (keypkt.stream_index == _vStream->index) {
+                            if(_vPktList.empty()){
+                                if(!(keypkt.flags &AV_PKT_FLAG_KEY)){
+                                    continue;
+                                }
+
+                                Time = av_q2d(_vStream->time_base) * keypkt.dts;
+                                if(Time > _seekTime){
+                                    av_packet_unref(&keypkt);
+                                    addVideoPkt(temp);
+                                    break;
+                                }
+                                av_packet_unref(&temp);
+                                av_packet_ref(&temp,&keypkt);
+                                av_packet_unref(&keypkt);
+
+                            }
+                        }
+                    }
+                }
+                Time = av_q2d(_vStream->time_base) * temp.dts;
+                ts = Time / av_q2d(timeBase);
+                ret = av_seek_frame(_fmtCtx, streamIdx, ts, AVSEEK_FLAG_BACKWARD);
+                if (ret < 0) { // seek失败
+                    qDebug() << "seek失败" << Time << ts << streamIdx;
+                    _seekTime = -1;
+                } else {
+
+                    //将最近关键帧到seekTime里的视频包读入队列
+                    while(1){
+                        ret = av_read_frame(_fmtCtx, &keypkt);
+                        if (ret == 0) {
+                            if (keypkt.stream_index == _vStream->index) {
+                                Time = av_q2d(_vStream->time_base) * keypkt.dts;
+                                if(Time > _seekTime){
+                                    addVideoPkt(keypkt);
+                                    break;
+                                }
+                                addVideoPkt(keypkt);
+                            }
+                        }
+                    }
+
+                    //定位到seekTime
+                    ts = _seekTime / av_q2d(timeBase);
+                    ret = av_seek_frame(_fmtCtx, streamIdx, ts, AVSEEK_FLAG_BACKWARD);
+                    if (ret < 0) { // seek失败
+                        qDebug() << "seek失败" << _seekTime << ts << streamIdx;
+                        _seekTime = -1;
+                    } else {
+                        qDebug() << "seek成功" << Time << ts << streamIdx;
+                        clearAudioPktList();
+                        _vSeekTime = _seekTime;
+                        _aSeekTime = _seekTime;
+                        _seekTime = -1;
+                        // 恢复时钟
+                        _aTime = 0;
+                        _vTime = 0;
+
+                    }
+                }
+
+            }
         }
     }
     if (_fmtCtxCanFree) {
