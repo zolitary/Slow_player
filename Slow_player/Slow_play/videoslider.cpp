@@ -3,28 +3,36 @@
 #include <QStyle>
 
 VideoSlider::VideoSlider(QWidget *parent) : QSlider(parent) {
-
+    setMouseTracking(true);//监听鼠标轨迹
+    start=clock();
+    x=0;
 }
 
-void VideoSlider::mousePressEvent(QMouseEvent *ev) {
-
+void VideoSlider::mouseReleaseEvent(QMouseEvent *ev) {
     int value = QStyle::sliderValueFromPosition(minimum(),
                 maximum(),
                 ev->pos().x(),
                 width());
     setValue(value);
-
-    QSlider::mousePressEvent(ev);
+    QSlider::mouseReleaseEvent(ev);
     emit clicked(this);
 }
 
-//void VideoSlider::mouseMoveEvent(QMouseEvent *ev){
-//    int value = QStyle::sliderValueFromPosition(minimum(),
-//                maximum(),
-//                ev->pos().x(),
-//                width());
-//    setValue(value);
+void VideoSlider::mouseMoveEvent(QMouseEvent *ev){
+    if(clock()-start >300)
+    {
+        int temp=ev->pos().x();
+        if((x - temp < 3 && x - temp > 0) || (temp - x < 3 && temp - x > 0 ))
+        {
+            int value = QStyle::sliderValueFromPosition(minimum(),
+                        maximum(),
+                        ev->pos().x(),
+                        width());
+            emit preview(value, ev->pos().x());
+        }
+        start=clock();
+        x=ev->pos().x();
 
-//    QSlider::mouseMoveEvent(ev);
-//    emit clicked(this);
-//}
+    }
+    QSlider::mouseMoveEvent(ev);
+}
