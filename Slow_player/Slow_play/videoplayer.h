@@ -57,6 +57,7 @@ public:
     ~VideoPlayer();
 
     void play();
+    void play_preview();//创建预览线程
     void pause();
     void stop();
     bool isPlaying();
@@ -76,6 +77,7 @@ signals:
     void initFinished(VideoPlayer *player);
     void playFailed(VideoPlayer *player);
     void frameDecoded(VideoPlayer *player,uint8_t *data,VideoSwsSpec &spec);
+
 
 private:
     //音频 参数
@@ -144,6 +146,7 @@ private:
     int initDecoder(AVCodecContext **decodeCtx,AVStream **stream,AVMediaType type);//初始化解码器和解码上下文
     void setState(State state);//改变状态
     void readFile();//读取文件数据
+    void startPreview();//用于预览的函数，仅有视频流
     void free();//释放资源
     void freeAudio();
     void freeVideo();
