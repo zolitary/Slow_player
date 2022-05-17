@@ -2,6 +2,7 @@
 #define VIDEOSLIDER_H
 
 #include <QSlider>
+#include <time.h>
 
 class VideoSlider : public QSlider {
     Q_OBJECT
@@ -11,10 +12,13 @@ public:
 signals:
     /** 点击事件 */
     void clicked(VideoSlider *slider);
+    void preview(int seektime, int x);
 
 private:
-    void mousePressEvent(QMouseEvent *ev) override;
-    //void mouseMoveEvent(QMouseEvent *ev) override;
+    void mouseReleaseEvent(QMouseEvent *ev) override;
+    void mouseMoveEvent(QMouseEvent *ev) override;
+    clock_t start;
+    int x;
 };
 
 #endif // VIDEOSLIDER_H
