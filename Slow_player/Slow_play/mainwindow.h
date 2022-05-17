@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "videoplayer.h"
 #include "videoslider.h"
+#include "videowidget.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -24,6 +25,7 @@ private slots:
     void onPlayerInitFinished(VideoPlayer *player);
     void onPlayerPlayFailed(VideoPlayer *player);
     void onSliderClicked(VideoSlider *slider);//seek
+    void onSliderMouseFoucs(int seektime, int x);
     void on_stopBtn_clicked();
     void on_openFileBtn_clicked();
     void on_timeSlider_valueChanged(int value);
@@ -33,7 +35,8 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    VideoPlayer *_player;
+    VideoPlayer *_player, *preview_player;
+    VideoWidget *preview;
     QString getTimeText(int value);
 };
 #endif // MAINWINDOW_H
