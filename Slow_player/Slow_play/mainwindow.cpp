@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QFileDialog>
+#include <thread>
+#include <time.h>
 #include <QDebug>
 #include <QMessageBox>
 
@@ -8,9 +10,15 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow) {
     ui->setupUi(this);
+    preview = NULL;
+    preview = new VideoWidget(this);
+    preview->resize(160,90);
+    preview->move(0, 0);
+    preview->setVisible(false);
 
     qRegisterMetaType<VideoPlayer::VideoSwsSpec>("VideoSwsSpec&");
     _player = new VideoPlayer();
+    preview_player = new VideoPlayer();
 
     connect(_player, &VideoPlayer::stateChanged,
             this, &MainWindow::onPlayerStateChanged);
@@ -22,24 +30,51 @@ MainWindow::MainWindow(QWidget *parent)
             this, &MainWindow::onPlayerPlayFailed);
     connect(_player, &VideoPlayer::frameDecoded,
             ui->videoWidget, &VideoWidget::onPlayerFrameDecoded);
+    connect(preview_player, &VideoPlayer::frameDecoded,
+            preview, &VideoWidget::onPlayerFrameDecoded);
     connect(_player, &VideoPlayer::stateChanged,
             ui->videoWidget, &VideoWidget::onPlayerStateChanged);
     connect(ui->timeSlider, &VideoSlider::clicked,
             this, &MainWindow::onSliderClicked);
+    connect(ui->timeSlider, &VideoSlider::preview,
+            this, &MainWindow::onSliderMouseFoucs);
 
     //音量设置
     ui->volumnSlider->setRange(VideoPlayer::Volumn::Min,VideoPlayer::Volumn::Max);
-    ui->volumnSlider->setValue(ui->volumnSlider->maximum() >> 3);
+    ui->volumnSlider->setValue(ui->volumnSlider->maximum() >> 1);
+
+    std::thread([this](){
+        clock_t start=clock();
+        while( preview!=NULL )
+        {
+            if(clock()-start > 3000)
+            {
+                this->preview->hide();
+                start = clock();
+            }
+        }
+
+    }).detach();
 }
 
 MainWindow::~MainWindow() {
     delete ui;
     delete _player;
+    delete preview_player;
 }
 
 
 void MainWindow::onSliderClicked(VideoSlider *slider) {
     _player->setTime(slider->value());
+}
+void MainWindow::onSliderMouseFoucs(int seektime,int x)
+{
+    qDebug()<<"获取了一次位置";
+    preview->move(x, ui->videoWidget->height() - preview->height() + 20);
+    preview->show();
+    preview_player->setTime(seektime);
+
+
 }
 
 void MainWindow::onPlayerPlayFailed(VideoPlayer *player) {
@@ -87,21 +122,25 @@ void MainWindow::onPlayerStateChanged(VideoPlayer *player) {
 
 void MainWindow::on_stopBtn_clicked() {
     _player->stop();
+    preview_player->stop();
 }
 
 void MainWindow::on_openFileBtn_clicked() {
     QString filename = QFileDialog::getOpenFileName(nullptr,
                        "选择多媒体文件",
                        "/",
-                       "多媒体文件 (*.mp4 *.avi *.mkv *.mp3 *.aac)");
+                       "多媒体文件 (*.mp4 *.avi *.mkv *.mp3 *.aac *.mov *.ts)");
     if (filename.isEmpty()) return;
     _player->setFilename(filename);
     _player->play();
+    preview_player->setFilename(filename);
+    preview_player->play_preview();
 }
 
 void MainWindow::on_timeSlider_valueChanged(int value) {
     ui->timeLabel->setText(getTimeText(value));
 }
+
 
 void MainWindow::on_volumnSlider_valueChanged(int value) {
     ui->volumnLabel->setText(QString("%1").arg(value));
