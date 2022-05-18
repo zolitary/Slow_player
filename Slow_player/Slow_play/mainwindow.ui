@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>810</width>
+    <width>860</width>
     <height>658</height>
    </rect>
   </property>
@@ -14,8 +14,8 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout">
-    <item>
+   <layout class="QGridLayout" name="gridLayout_2">
+    <item row="0" column="0">
      <widget class="QStackedWidget" name="playWidget">
       <property name="minimumSize">
        <size>
@@ -53,56 +53,22 @@
        <property name="styleSheet">
         <string notr="true"/>
        </property>
-       <layout class="QGridLayout" name="gridLayout">
-        <item row="0" column="0">
+       <layout class="QHBoxLayout" name="horizontalLayout_6">
+        <item>
          <widget class="VideoWidget" name="videoWidget" native="true">
           <property name="enabled">
            <bool>true</bool>
           </property>
-          <widget class="QListWidget" name="fileList">
-           <property name="geometry">
-            <rect>
-             <x>650</x>
-             <y>0</y>
-             <width>121</width>
-             <height>561</height>
-            </rect>
-           </property>
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-             <horstretch>100</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="focusPolicy">
-            <enum>Qt::NoFocus</enum>
-           </property>
-           <property name="inputMethodHints">
-            <set>Qt::ImhNone</set>
-           </property>
-           <property name="verticalScrollBarPolicy">
-            <enum>Qt::ScrollBarAsNeeded</enum>
-           </property>
-           <property name="sizeAdjustPolicy">
-            <enum>QAbstractScrollArea::AdjustToContents</enum>
-           </property>
-           <property name="resizeMode">
-            <enum>QListView::Adjust</enum>
-           </property>
-           <property name="batchSize">
-            <number>50</number>
-           </property>
-           <property name="itemAlignment">
-            <set>Qt::AlignLeading</set>
-           </property>
-          </widget>
          </widget>
+        </item>
+        <item>
+         <widget class="QListWidget" name="fileList"/>
         </item>
        </layout>
       </widget>
      </widget>
     </item>
-    <item>
+    <item row="1" column="0">
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -317,8 +283,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>810</width>
-     <height>23</height>
+     <width>860</width>
+     <height>22</height>
     </rect>
    </property>
   </widget>

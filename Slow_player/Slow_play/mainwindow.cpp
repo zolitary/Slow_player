@@ -113,6 +113,10 @@ void MainWindow::onPlayerStateChanged(VideoPlayer *player) {
         ui->listBtn->setEnabled(true);
         //进入播放洁面
         ui->playWidget->setCurrentWidget(ui->videoPage);
+
+        ui->fileList->resize(0.2*ui->playWidget->width(),ui->playWidget->height());
+        ui->fileList->move(0.8*ui->playWidget->width(),0);
+        ui->videoWidget->resize(0.8*ui->playWidget->width(),ui->playWidget->height());
     }
 }
 
@@ -178,6 +182,45 @@ void MainWindow::on_playBtn_clicked() {
     }
 }
 
+void MainWindow::on_listBtn_clicked()
+{
+    if(!ui->fileList->isHidden())//播放列表为打开状态
+    {
+        ui->fileList->hide();
+        ui->listBtn->setText("显示播放列表");
+        ui->videoWidget->resize(ui->playWidget->width(),ui->playWidget->height());
+    }
+    else
+    {
+        ui->fileList->show();
+        ui->listBtn->setText("隐藏播放列表");
+        ui->fileList->resize(0.2*ui->playWidget->width(),ui->playWidget->height());
+        ui->fileList->move(0.8*ui->playWidget->width(),0);
+        ui->videoWidget->resize(0.8*ui->playWidget->width(),ui->playWidget->height());
+    }
+}
+
+void MainWindow::on_fileList_itemDoubleClicked(QListWidgetItem *item)
+{
+    //点击播放列表时若正在播放则清楚播放帧，重新打开文件
+    VideoPlayer::State state = _player->getState();
+    if (state == VideoPlayer::Playing)
+    {
+        _player->stop();
+        preview_player->stop();
+    }
+
+    //data中的是绝对路径，text是文件名
+    QString fileAbolutePath = item->data(Qt::UserRole).toString(),
+            fileName = item->text();
+
+
+    _player->setFilename(fileAbolutePath);
+    _player->play();
+    preview_player->setFilename(fileAbolutePath);
+    preview_player->play_preview();
+}
+
 QString MainWindow::getTimeText(int value) {
     //获取XX：XX：XX格式的时间文本
     QLatin1Char fill = QLatin1Char('0');
@@ -197,38 +240,3 @@ void MainWindow::on_muteBtn_clicked() {
     }
 }
 
-void MainWindow::on_listBtn_clicked()
-{
-    if(!ui->fileList->isHidden())//播放列表为打开状态
-    {
-        ui->fileList->hide();
-        ui->listBtn->setText("显示播放列表");
-    }
-    else
-    {
-        ui->fileList->show();
-        ui->listBtn->setText("隐藏播放列表");
-    }
-}
-
-
-void MainWindow::on_fileList_itemDoubleClicked(QListWidgetItem *item)
-{
-    //点击播放列表时若正在播放则清楚播放帧，重新打开文件
-    VideoPlayer::State state = _player->getState();
-    if (state == VideoPlayer::Playing)
-    {
-        _player->stop();
-        preview_player->stop();
-    }
-
-    //data中的是绝对路径，text是文件名
-    QString fileAbolutePath = item->data(Qt::UserRole).toString(),
-            fileName = item->text();
-
-
-    _player->setFilename(fileAbolutePath);
-    _player->play();
-    preview_player->setFilename(fileName);
-    preview_player->play_preview();
-}
