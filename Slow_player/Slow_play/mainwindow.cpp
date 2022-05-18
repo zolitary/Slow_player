@@ -5,6 +5,7 @@
 #include <time.h>
 #include <QDebug>
 #include <QMessageBox>
+#include <qlistwidget.h>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -44,7 +45,6 @@ MainWindow::MainWindow(QWidget *parent)
     //音量设置
     ui->volumnSlider->setRange(VideoPlayer::Volumn::Min,VideoPlayer::Volumn::Max);
     ui->volumnSlider->setValue(ui->volumnSlider->maximum() >> 1);
-
 }
 
 MainWindow::~MainWindow() {
@@ -99,6 +99,7 @@ void MainWindow::onPlayerStateChanged(VideoPlayer *player) {
         ui->timeSlider->setEnabled(false);
         ui->volumnSlider->setEnabled(false);
         ui->muteBtn->setEnabled(false);
+        ui->listBtn->setEnabled(false);
         ui->durationLabel->setText(getTimeText(0));
         ui->timeSlider->setValue(0);
         //返回打开文件
@@ -109,6 +110,7 @@ void MainWindow::onPlayerStateChanged(VideoPlayer *player) {
         ui->timeSlider->setEnabled(true);
         ui->volumnSlider->setEnabled(true);
         ui->muteBtn->setEnabled(true);
+        ui->listBtn->setEnabled(true);
         //进入播放洁面
         ui->playWidget->setCurrentWidget(ui->videoPage);
     }
@@ -120,15 +122,41 @@ void MainWindow::on_stopBtn_clicked() {
 }
 
 void MainWindow::on_openFileBtn_clicked() {
-    QString filename = QFileDialog::getOpenFileName(nullptr,
-                       "选择多媒体文件",
-                       "/",
-                       "多媒体文件 (*.mp4 *.avi *.mkv *.mp3 *.aac *.mov *.ts)");
-    if (filename.isEmpty()) return;
-    _player->setFilename(filename);
-    _player->play();
-    preview_player->setFilename(filename);
-    preview_player->play_preview();
+
+    //打开新的文件夹前清空已读入的列表
+    if(ui->fileList->count() != 0)
+    {
+        ui->fileList->clear();
+    }
+
+    //获取打开的文件夹
+    QString filename = QFileDialog::getExistingDirectory();
+    QDir *dir=new QDir(filename);
+
+    //设置目的文件格式
+    QStringList filter;
+    filter << QString("*.mp4") << QString("*.avi")
+           << QString("*.mkv") << QString("*.mp3")
+           << QString("*.aac") << QString("*.mov")
+           << QString("*.ts");
+    dir->setNameFilters(filter);
+
+
+    QList fileInfo = dir->entryInfoList(QDir::Files | QDir::CaseSensitive);//过滤条件为只限文件并区分大小写
+    for(int i = 0;i < fileInfo.count(); i++)
+    {
+        QListWidgetItem *item = new QListWidgetItem;
+        item->setData(Qt::UserRole,fileInfo.at(i).absoluteFilePath());
+        item->setText(fileInfo.at(i).fileName());
+        ui->fileList->addItem(item);        //将读取到的文件名同步到视图中
+    }
+
+    ui->fileList->setBackgroundRole(QPalette::Highlight);
+    ui->fileList->update(); //更新视图
+
+    ui->playWidget->setCurrentWidget(ui->videoPage);
+    ui->fileList->show();
+
 }
 
 void MainWindow::on_timeSlider_valueChanged(int value) {
@@ -167,4 +195,40 @@ void MainWindow::on_muteBtn_clicked() {
         _player->setMute(true);
         ui->muteBtn->setText("声音");
     }
+}
+
+void MainWindow::on_listBtn_clicked()
+{
+    if(!ui->fileList->isHidden())//播放列表为打开状态
+    {
+        ui->fileList->hide();
+        ui->listBtn->setText("显示播放列表");
+    }
+    else
+    {
+        ui->fileList->show();
+        ui->listBtn->setText("隐藏播放列表");
+    }
+}
+
+
+void MainWindow::on_fileList_itemDoubleClicked(QListWidgetItem *item)
+{
+    //点击播放列表时若正在播放则清楚播放帧，重新打开文件
+    VideoPlayer::State state = _player->getState();
+    if (state == VideoPlayer::Playing)
+    {
+        _player->stop();
+        preview_player->stop();
+    }
+
+    //data中的是绝对路径，text是文件名
+    QString fileAbolutePath = item->data(Qt::UserRole).toString(),
+            fileName = item->text();
+
+
+    _player->setFilename(fileAbolutePath);
+    _player->play();
+    preview_player->setFilename(fileName);
+    preview_player->play_preview();
 }

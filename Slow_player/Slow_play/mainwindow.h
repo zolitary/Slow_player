@@ -5,7 +5,7 @@
 #include "videoplayer.h"
 #include "videoslider.h"
 #include "videowidget.h"
-
+#include <qlistwidget.h>
 QT_BEGIN_NAMESPACE
 namespace Ui {
     class MainWindow;
@@ -33,6 +33,9 @@ private slots:
     void on_playBtn_clicked();
     void on_muteBtn_clicked();
     void onMouseLeaveSlider();
+
+    void on_listBtn_clicked();
+    void on_fileList_itemDoubleClicked(QListWidgetItem *item);
 
 private:
     Ui::MainWindow *ui;
