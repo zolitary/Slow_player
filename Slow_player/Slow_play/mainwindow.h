@@ -37,6 +37,7 @@ private slots:
     void on_listBtn_clicked();
     void on_fileList_itemDoubleClicked(QListWidgetItem *item);
 
+
 private:
     Ui::MainWindow *ui;
     VideoPlayer *_player, *preview_player;

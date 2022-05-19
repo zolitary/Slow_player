@@ -1,6 +1,8 @@
 #include "videoplayer.h"
+#include "videoslider.h"
 #include <thread>
 #include <QDebug>
+
 
 #define AUDIO_MAX_PKT_SIZE 1000
 #define VIDEO_MAX_PKT_SIZE 500
@@ -13,6 +15,7 @@ VideoPlayer::VideoPlayer(QObject *parent) : QObject(parent) {
         emit playFailed(this);
         return;
     }
+
 }
 
 VideoPlayer::~VideoPlayer() {
@@ -318,6 +321,10 @@ void VideoPlayer::startPreview() {
     //从输入文件中读取数据
     AVPacket pkt,keypkt,temp;
     while (_state != Stopped) {
+        _previewMutex.lock();
+        _previewMutex.wait();
+        _previewMutex.unlock();
+
         //处理seek操作
         if (_seekTime >= 0) {
             int streamIdx;
@@ -483,5 +490,11 @@ void VideoPlayer::fataError() {
     _state = Playing;
     stop();
     emit playFailed(this);
+}
+
+void VideoPlayer::updateSignal(){
+    _previewMutex.lock();
+    _previewMutex.signal();
+    _previewMutex.unlock();
 }
 

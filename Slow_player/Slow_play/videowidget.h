@@ -21,6 +21,7 @@ public slots:
     void onPlayerStateChanged(VideoPlayer *player);
 
 private:
+
     QImage *_image = nullptr;
     QRect _rect;
     void paintEvent(QPaintEvent *event) override;

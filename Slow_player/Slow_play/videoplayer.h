@@ -33,6 +33,7 @@ extern "C" {
 class VideoPlayer : public QObject {
     Q_OBJECT
 public:
+
     typedef enum {
         Stopped = 0,
         Playing,
@@ -53,6 +54,8 @@ public:
         int size;
     } VideoSwsSpec;
 
+
+
     explicit VideoPlayer(QObject *parent = nullptr);
     ~VideoPlayer();
 
@@ -70,6 +73,7 @@ public:
     int getVolumn();
     void setMute(bool mute);//静音
     bool isMute();
+    void updateSignal();
 
 signals:
     void stateChanged(VideoPlayer *player);
@@ -77,6 +81,8 @@ signals:
     void initFinished(VideoPlayer *player);
     void playFailed(VideoPlayer *player);
     void frameDecoded(VideoPlayer *player,uint8_t *data,VideoSwsSpec &spec);
+
+
 
 
 private:
@@ -135,6 +141,7 @@ private:
 
 
     //辅助
+    CondMutex _previewMutex;
     AVFormatContext *_fmtCtx = nullptr;//解封装上下文
     bool _fmtCtxCanFree = false;//ftCtx是否可以释放
     int _volumn = Max;//音量
@@ -151,6 +158,8 @@ private:
     void freeAudio();
     void freeVideo();
     void fataError();//错误处理
+
+
 };
 
 #endif // VIDEOPLAYER_H

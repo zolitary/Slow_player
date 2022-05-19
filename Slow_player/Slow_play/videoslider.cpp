@@ -1,4 +1,5 @@
 #include "videoslider.h"
+#include "videoplayer.h"
 #include <QMouseEvent>
 #include <QStyle>
 
@@ -28,7 +29,10 @@ void VideoSlider::mouseMoveEvent(QMouseEvent *ev){
                         maximum(),
                         ev->pos().x(),
                         width());
+//            _previewMutex.lock();
+//            _previewMutex.signal();
             emit preview(value, ev->pos().x());
+//            _previewMutex.unlock();
         }
         start=clock();
         x=ev->pos().x();

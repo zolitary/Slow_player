@@ -42,6 +42,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->timeSlider,&VideoSlider::mouseleave,
             this,&MainWindow::onMouseLeaveSlider);
 
+
     //音量设置
     ui->volumnSlider->setRange(VideoPlayer::Volumn::Min,VideoPlayer::Volumn::Max);
     ui->volumnSlider->setValue(ui->volumnSlider->maximum() >> 1);
@@ -60,9 +61,11 @@ void MainWindow::onSliderClicked(VideoSlider *slider) {
 void MainWindow::onSliderMouseFoucs(int seektime,int x)
 {
     //qDebug()<<"获取了一次位置";
+    preview_player->setTime(seektime);
+    preview_player->updateSignal();
     preview->move(x+40, ui->videoWidget->height() - preview->height() + 20);
     preview->show();
-    preview_player->setTime(seektime);
+
 
 
 }
