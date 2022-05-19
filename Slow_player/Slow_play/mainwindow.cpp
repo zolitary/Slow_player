@@ -125,7 +125,7 @@ void MainWindow::onPlayerStateChanged(VideoPlayer *player) {
 
 void MainWindow::on_stopBtn_clicked() {
     _player->stop();
-    preview_player->stop();
+    preview_player->stopwithSignal();
 }
 
 void MainWindow::on_openFileBtn_clicked() {

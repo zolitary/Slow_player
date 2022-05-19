@@ -54,6 +54,16 @@ void VideoPlayer::pause() {
 void VideoPlayer::stop() {
     if (_state == Stopped) return;
     _state = Stopped;
+
+    // 释放资源
+    free();
+    emit stateChanged(this);
+}
+
+void VideoPlayer::stopwithSignal() {
+    if (_state == Stopped) return;
+    _state = Stopped;
+    updateSignal();
     // 释放资源
     free();
     emit stateChanged(this);

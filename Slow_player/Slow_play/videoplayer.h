@@ -63,6 +63,7 @@ public:
     void play_preview();//创建预览线程
     void pause();
     void stop();
+    void stopwithSignal();
     bool isPlaying();
     State getState();
     void setFilename(QString &filename);
