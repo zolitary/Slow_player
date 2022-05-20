@@ -270,6 +270,13 @@
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="QPushButton" name="openDirBtn">
+            <property name="text">
+             <string>导入文件夹</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
        </layout>
@@ -284,7 +291,7 @@
      <x>0</x>
      <y>0</y>
      <width>860</width>
-     <height>22</height>
+     <height>23</height>
     </rect>
    </property>
   </widget>

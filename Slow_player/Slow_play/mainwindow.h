@@ -38,10 +38,13 @@ private slots:
     void on_fileList_itemDoubleClicked(QListWidgetItem *item);
 
 
+    void on_openDirBtn_clicked();
+
 private:
     Ui::MainWindow *ui;
     VideoPlayer *_player, *preview_player;
     VideoWidget *preview;
     QString getTimeText(int value);
+    QSet<QString> file;//根据文件绝对路径判断是否重复
 };
 #endif // MAINWINDOW_H
