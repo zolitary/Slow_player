@@ -42,12 +42,21 @@
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">&quot;background-color:rgba(0,0,0,0)&quot;</string>
+          </property>
           <property name="text">
            <string/>
           </property>
           <property name="icon">
            <iconset resource="icon/icon.qrc">
             <normaloff>:/new/prefix/addFile.png</normaloff>:/new/prefix/addFile.png</iconset>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -59,12 +68,21 @@
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">&quot;background-color:rgba(0,0,0,0)&quot;</string>
+          </property>
           <property name="text">
            <string/>
           </property>
           <property name="icon">
            <iconset resource="icon/icon.qrc">
             <normaloff>:/new/prefix/addFolder.png</normaloff>:/new/prefix/addFolder.png</iconset>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -120,12 +138,21 @@
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">&quot;background-color:rgba(0,0,0,0)&quot;</string>
+          </property>
           <property name="text">
            <string/>
           </property>
           <property name="icon">
            <iconset resource="icon/icon.qrc">
             <normaloff>:/new/prefix/hideList.png</normaloff>:/new/prefix/hideList.png</iconset>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -144,12 +171,21 @@
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">&quot;background-color:rgba(0,0,0,0)&quot;</string>
+              </property>
               <property name="text">
                <string/>
               </property>
               <property name="icon">
                <iconset resource="icon/icon.qrc">
                 <normaloff>:/new/prefix/addFile.png</normaloff>:/new/prefix/addFile.png</iconset>
+              </property>
+              <property name="flat">
+               <bool>true</bool>
               </property>
              </widget>
             </item>
@@ -161,12 +197,21 @@
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">&quot;background-color:rgba(0,0,0,0)&quot;</string>
+              </property>
               <property name="text">
                <string/>
               </property>
               <property name="icon">
                <iconset resource="icon/icon.qrc">
                 <normaloff>:/new/prefix/addFolder.png</normaloff>:/new/prefix/addFolder.png</iconset>
+              </property>
+              <property name="flat">
+               <bool>true</bool>
               </property>
              </widget>
             </item>
@@ -178,12 +223,21 @@
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">&quot;background-color:rgba(0,0,0,0)&quot;</string>
+              </property>
               <property name="text">
                <string/>
               </property>
               <property name="icon">
                <iconset resource="icon/icon.qrc">
                 <normaloff>:/new/prefix/clear.png</normaloff>:/new/prefix/clear.png</iconset>
+              </property>
+              <property name="flat">
+               <bool>true</bool>
               </property>
              </widget>
             </item>
@@ -302,6 +356,18 @@
          <layout class="QHBoxLayout" name="horizontalLayout_2">
           <item>
            <widget class="QPushButton" name="back3sBtn">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">&quot;background-color:rgba(0,0,0,0)&quot;</string>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -309,16 +375,28 @@
              <iconset resource="icon/icon.qrc">
               <normaloff>:/new/prefix/reverse3s.png</normaloff>:/new/prefix/reverse3s.png</iconset>
             </property>
+            <property name="flat">
+             <bool>true</bool>
+            </property>
            </widget>
           </item>
           <item>
            <widget class="QPushButton" name="lastMediaBtn">
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">&quot;background-color:rgba(0,0,0,0)&quot;</string>
+            </property>
             <property name="text">
              <string/>
             </property>
             <property name="icon">
              <iconset resource="icon/icon.qrc">
               <normaloff>:/new/prefix/lastMedia.png</normaloff>:/new/prefix/lastMedia.png</iconset>
+            </property>
+            <property name="flat">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -333,6 +411,12 @@
               <height>16777215</height>
              </size>
             </property>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">&quot;background-color:rgba(0,0,0,0)&quot;</string>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -340,10 +424,19 @@
              <iconset resource="icon/icon.qrc">
               <normaloff>:/new/prefix/play.png</normaloff>:/new/prefix/play.png</iconset>
             </property>
+            <property name="flat">
+             <bool>true</bool>
+            </property>
            </widget>
           </item>
           <item>
            <widget class="QPushButton" name="nextMediaBtn">
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">&quot;background-color:rgba(0,0,0,0)&quot;</string>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -351,16 +444,28 @@
              <iconset resource="icon/icon.qrc">
               <normaloff>:/new/prefix/nextMedia.png</normaloff>:/new/prefix/nextMedia.png</iconset>
             </property>
+            <property name="flat">
+             <bool>true</bool>
+            </property>
            </widget>
           </item>
           <item>
            <widget class="QPushButton" name="speed3sBtn">
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">&quot;background-color:rgba(0,0,0,0)&quot;</string>
+            </property>
             <property name="text">
              <string/>
             </property>
             <property name="icon">
              <iconset resource="icon/icon.qrc">
               <normaloff>:/new/prefix/speed3s.png</normaloff>:/new/prefix/speed3s.png</iconset>
+            </property>
+            <property name="flat">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -375,12 +480,21 @@
               <height>16777215</height>
              </size>
             </property>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">&quot;background-color:rgba(0,0,0,0)&quot;</string>
+            </property>
             <property name="text">
              <string/>
             </property>
             <property name="icon">
              <iconset resource="icon/icon.qrc">
               <normaloff>:/new/prefix/24gl-stop.png</normaloff>:/new/prefix/24gl-stop.png</iconset>
+            </property>
+            <property name="flat">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -400,7 +514,11 @@
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_4">
             <item>
-             <widget class="QComboBox" name="mutipleSpeed"/>
+             <widget class="QComboBox" name="mutipleSpeed">
+              <property name="styleSheet">
+               <string notr="true">&quot;background-color:rgba(0,0,0,0)&quot;</string>
+              </property>
+             </widget>
             </item>
             <item>
              <widget class="QPushButton" name="muteBtn">
@@ -413,12 +531,21 @@
                 <height>16777215</height>
                </size>
               </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">&quot;background-color:rgba(0,0,0,0)&quot;</string>
+              </property>
               <property name="text">
                <string/>
               </property>
               <property name="icon">
                <iconset resource="icon/icon.qrc">
                 <normaloff>:/new/prefix/aloud.png</normaloff>:/new/prefix/aloud.png</iconset>
+              </property>
+              <property name="flat">
+               <bool>true</bool>
               </property>
              </widget>
             </item>
@@ -492,12 +619,21 @@
             </item>
             <item>
              <widget class="QPushButton" name="fillBtn">
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">&quot;background-color:rgba(0,0,0,0)&quot;</string>
+              </property>
               <property name="text">
                <string/>
               </property>
               <property name="icon">
                <iconset resource="icon/icon.qrc">
                 <normaloff>:/new/prefix/fill.png</normaloff>:/new/prefix/fill.png</iconset>
+              </property>
+              <property name="flat">
+               <bool>true</bool>
               </property>
              </widget>
             </item>
