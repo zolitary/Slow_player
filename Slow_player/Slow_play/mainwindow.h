@@ -40,11 +40,22 @@ private slots:
 
     void on_openDirBtn_clicked();
 
+    void on_nextMediaBtn_clicked();
+
+    void on_lastMediaBtn_clicked();
+
+    void on_addFileBtn_clicked();
+
+    void on_addFolderBtn_clicked();
+
+    void on_clearListBtn_clicked();
+
 private:
     Ui::MainWindow *ui;
     VideoPlayer *_player, *preview_player;
     VideoWidget *preview;
     QString getTimeText(int value);
     QSet<QString> file;//根据文件绝对路径判断是否重复
+    QSet<QString>::iterator index;          //记录当前播放文件在播放列表中位置
 };
 #endif // MAINWINDOW_H
