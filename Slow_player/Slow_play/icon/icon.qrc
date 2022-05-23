@@ -1,0 +1,20 @@
+<RCC>
+    <qresource prefix="/new/prefix">
+        <file>24gl-stop.png</file>
+        <file>addFile.png</file>
+        <file>addFolder.png</file>
+        <file>aloud.png</file>
+        <file>clear.png</file>
+        <file>fill.png</file>
+        <file>hideList.png</file>
+        <file>lastMedia.png</file>
+        <file>mute.png</file>
+        <file>nextMedia.png</file>
+        <file>pause.png</file>
+        <file>play.png</file>
+        <file>reverse3s.png</file>
+        <file>showList.png</file>
+        <file>speed3s.png</file>
+        <file>zoom.png</file>
+    </qresource>
+</RCC>
