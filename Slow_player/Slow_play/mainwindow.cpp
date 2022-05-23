@@ -66,9 +66,8 @@ void MainWindow::onSliderMouseFoucs(int seektime,int x)
     //qDebug()<<"获取了一次位置";
     preview_player->setTime(seektime);
     preview_player->updateSignal();
-    preview->move(x+40, ui->videoWidget->height() - preview->height() + 20);
+    preview->move(x-70>0?x-70:0, ui->videoWidget->height() - preview->height() + 20);
     preview->show();
-
 
 
 }
@@ -439,5 +438,17 @@ void MainWindow::on_addFolderBtn_clicked()
 void MainWindow::on_clearListBtn_clicked()
 {
 
+}
+
+
+void MainWindow::on_back3sBtn_clicked()
+{
+    ui->timeSlider->changeValue(-10);
+}
+
+
+void MainWindow::on_speed3sBtn_clicked()
+{
+    ui->timeSlider->changeValue(10);
 }
 

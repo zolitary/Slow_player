@@ -9,6 +9,7 @@ class VideoSlider : public QSlider {
     Q_OBJECT
 public:
     explicit VideoSlider(QWidget *parent = nullptr);
+    void changeValue(int n);
 
 
 signals:
@@ -22,6 +23,7 @@ private:
     void mouseReleaseEvent(QMouseEvent *ev) override;
     void mouseMoveEvent(QMouseEvent *ev) override;
     void leaveEvent(QEvent *ev) override;
+
     clock_t start;
     int x;
 };

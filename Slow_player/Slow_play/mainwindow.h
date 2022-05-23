@@ -39,16 +39,13 @@ private slots:
 
 
     void on_openDirBtn_clicked();
-
     void on_nextMediaBtn_clicked();
-
     void on_lastMediaBtn_clicked();
-
     void on_addFileBtn_clicked();
-
     void on_addFolderBtn_clicked();
-
     void on_clearListBtn_clicked();
+    void on_back3sBtn_clicked();
+    void on_speed3sBtn_clicked();
 
 private:
     Ui::MainWindow *ui;

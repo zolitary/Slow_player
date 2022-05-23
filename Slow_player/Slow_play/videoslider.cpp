@@ -44,3 +44,9 @@ void VideoSlider::mouseMoveEvent(QMouseEvent *ev){
 void VideoSlider::leaveEvent(QEvent *ev){
     emit mouseleave();
 }
+
+void VideoSlider::changeValue(int n){
+    int valuenow = value();
+    setValue(valuenow+n);
+    emit clicked(this);
+}
