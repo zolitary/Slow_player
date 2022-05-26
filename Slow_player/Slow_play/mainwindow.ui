@@ -30,7 +30,7 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="openFilePage">
        <layout class="QHBoxLayout" name="horizontalLayout_5">
@@ -44,9 +44,6 @@
           </property>
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">&quot;background-color:rgba(0,0,0,0)&quot;</string>
           </property>
           <property name="text">
            <string/>
@@ -72,7 +69,7 @@
            <enum>Qt::NoFocus</enum>
           </property>
           <property name="styleSheet">
-           <string notr="true">&quot;background-color:rgba(0,0,0,0)&quot;</string>
+           <string notr="true"/>
           </property>
           <property name="text">
            <string/>
@@ -141,9 +138,6 @@
           <property name="focusPolicy">
            <enum>Qt::NoFocus</enum>
           </property>
-          <property name="styleSheet">
-           <string notr="true">&quot;background-color:rgba(0,0,0,0)&quot;</string>
-          </property>
           <property name="text">
            <string/>
           </property>
@@ -174,9 +168,6 @@
               <property name="focusPolicy">
                <enum>Qt::NoFocus</enum>
               </property>
-              <property name="styleSheet">
-               <string notr="true">&quot;background-color:rgba(0,0,0,0)&quot;</string>
-              </property>
               <property name="text">
                <string/>
               </property>
@@ -200,9 +191,6 @@
               <property name="focusPolicy">
                <enum>Qt::NoFocus</enum>
               </property>
-              <property name="styleSheet">
-               <string notr="true">&quot;background-color:rgba(0,0,0,0)&quot;</string>
-              </property>
               <property name="text">
                <string/>
               </property>
@@ -225,9 +213,6 @@
               </property>
               <property name="focusPolicy">
                <enum>Qt::NoFocus</enum>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">&quot;background-color:rgba(0,0,0,0)&quot;</string>
               </property>
               <property name="text">
                <string/>
@@ -365,9 +350,6 @@
             <property name="focusPolicy">
              <enum>Qt::NoFocus</enum>
             </property>
-            <property name="styleSheet">
-             <string notr="true">&quot;background-color:rgba(0,0,0,0)&quot;</string>
-            </property>
             <property name="text">
              <string/>
             </property>
@@ -384,9 +366,6 @@
            <widget class="QPushButton" name="lastMediaBtn">
             <property name="focusPolicy">
              <enum>Qt::NoFocus</enum>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">&quot;background-color:rgba(0,0,0,0)&quot;</string>
             </property>
             <property name="text">
              <string/>
@@ -414,9 +393,6 @@
             <property name="focusPolicy">
              <enum>Qt::NoFocus</enum>
             </property>
-            <property name="styleSheet">
-             <string notr="true">&quot;background-color:rgba(0,0,0,0)&quot;</string>
-            </property>
             <property name="text">
              <string/>
             </property>
@@ -434,9 +410,6 @@
             <property name="focusPolicy">
              <enum>Qt::NoFocus</enum>
             </property>
-            <property name="styleSheet">
-             <string notr="true">&quot;background-color:rgba(0,0,0,0)&quot;</string>
-            </property>
             <property name="text">
              <string/>
             </property>
@@ -453,9 +426,6 @@
            <widget class="QPushButton" name="speed3sBtn">
             <property name="focusPolicy">
              <enum>Qt::NoFocus</enum>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">&quot;background-color:rgba(0,0,0,0)&quot;</string>
             </property>
             <property name="text">
              <string/>
@@ -482,9 +452,6 @@
             </property>
             <property name="focusPolicy">
              <enum>Qt::NoFocus</enum>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">&quot;background-color:rgba(0,0,0,0)&quot;</string>
             </property>
             <property name="text">
              <string/>
@@ -514,11 +481,7 @@
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_4">
             <item>
-             <widget class="QComboBox" name="mutipleSpeed">
-              <property name="styleSheet">
-               <string notr="true">&quot;background-color:rgba(0,0,0,0)&quot;</string>
-              </property>
-             </widget>
+             <widget class="QComboBox" name="mutipleSpeed"/>
             </item>
             <item>
              <widget class="QPushButton" name="muteBtn">
@@ -533,9 +496,6 @@
               </property>
               <property name="focusPolicy">
                <enum>Qt::NoFocus</enum>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">&quot;background-color:rgba(0,0,0,0)&quot;</string>
               </property>
               <property name="text">
                <string/>
@@ -621,9 +581,6 @@
              <widget class="QPushButton" name="fillBtn">
               <property name="focusPolicy">
                <enum>Qt::NoFocus</enum>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">&quot;background-color:rgba(0,0,0,0)&quot;</string>
               </property>
               <property name="text">
                <string/>

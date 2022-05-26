@@ -68,8 +68,6 @@ void MainWindow::onSliderMouseFoucs(int seektime,int x)
     preview_player->updateSignal();
     preview->move(x-70>0?x-70:0, ui->videoWidget->height() - preview->height() + 20);
     preview->show();
-
-
 }
 
 void MainWindow::onMouseLeaveSlider(){
@@ -110,6 +108,7 @@ void MainWindow::onPlayerStateChanged(VideoPlayer *player) {
         ui->mutipleSpeed->setEnabled(false);
         ui->muteBtn->setEnabled(false);
         ui->listBtn->setEnabled(false);
+
         ui->durationLabel->setText(getTimeText(0));
         ui->timeSlider->setValue(0);
 
@@ -132,54 +131,18 @@ void MainWindow::onPlayerStateChanged(VideoPlayer *player) {
 
         ui->videoWidget->resize(0.8*ui->playWidget->width(),ui->playWidget->height());
         ui->listBtn->move(ui->videoWidget->width() - ui->listBtn->width(),ui->videoWidget->height() * 0.5);
-
         ui->addFileBtn->move(ui->videoWidget->width(),0);
         ui->addFolderBtn->move(ui->videoWidget->width()  + ui->addFolderBtn->width(),0);
         ui->clearListBtn->move(ui->videoWidget->width()  + 2*ui->addFolderBtn->width(),0);
         ui->fileList->resize(ui->playWidget->width() - ui->videoWidget->width(), ui->playWidget->height() - ui->addFileBtn->height());
         ui->fileList->move(ui->videoWidget->width(), ui->addFileBtn->height());
-
         ui->playWidget->setCurrentWidget(ui->videoPage);
-
-
-
     }
 }
 
 void MainWindow::on_stopBtn_clicked() {
     _player->stop();
     preview_player->stopwithSignal();
-}
-
-void MainWindow::on_openFileBtn_clicked() {
-    QString filePath = QFileDialog::getOpenFileName(  this,
-                                                      "选择多媒体文件", //窗口左上角显示
-                                                      "/home", //初始路径
-                                                      "多媒体文件 (*.mp4 *.avi *.mkv *.mp3 *.aac *.mov *.ts)"
-                                                      );
-
-
-    if(!file.contains(filePath))//不与已有文件重复的情况下
-    {
-        QFileInfo temp;
-        temp.setFile(filePath);
-        QListWidgetItem *item = new QListWidgetItem;
-        item->setData(Qt::UserRole,temp.absoluteFilePath());
-        item->setText(temp.fileName());
-        ui->fileList->addItem(item);
-
-        file.insert(filePath); //将文件绝对路径加入到集合中
-
-    }
-
-    ui->playWidget->setCurrentWidget(ui->videoPage);
-
-
-    _player->setFilename(filePath);
-    _player->play();
-    preview_player->setFilename(filePath);
-    preview_player->play_preview();
-
 }
 
 void MainWindow::on_timeSlider_valueChanged(int value) {
@@ -275,13 +238,70 @@ QString MainWindow::getTimeText(int value) {
 void MainWindow::on_muteBtn_clicked() {
     if (_player->isMute()) {
         _player->setMute(false);
-        ui->muteBtn->setIcon(QIcon(":/new/prefix/mute.png"));
+        ui->muteBtn->setIcon(QIcon(":/new/prefix/aloud.png"));
     } else {
         _player->setMute(true);
-        ui->muteBtn->setIcon(QIcon(":/new/prefix/aloud.png"));
+        ui->muteBtn->setIcon(QIcon(":/new/prefix/mute.png"));
     }
 }
 
+void MainWindow::on_back3sBtn_clicked()
+{
+    VideoPlayer::State state = _player->getState();
+    if(state != VideoPlayer::Stopped)
+    {
+        ui->timeSlider->changeValue(-10);
+    }
+}
+
+
+void MainWindow::on_speed3sBtn_clicked()
+{
+    VideoPlayer::State state = _player->getState();
+    if(state != VideoPlayer::Stopped)
+    {
+        ui->timeSlider->changeValue(10);
+    }
+}
+
+
+void MainWindow::on_nextMediaBtn_clicked()
+{
+
+}
+
+
+void MainWindow::on_lastMediaBtn_clicked()
+{
+
+}
+
+void MainWindow::on_openFileBtn_clicked() {
+    QString filePath = QFileDialog::getOpenFileName(  this,
+                                                      "选择多媒体文件", //窗口左上角显示
+                                                      "/home", //初始路径
+                                                      "多媒体文件 (*.mp4 *.avi *.mkv *.mp3 *.aac *.mov *.ts)"
+                                                      );
+
+
+    if(!file.contains(filePath))//不与已有文件重复的情况下
+    {
+        QFileInfo temp;
+        temp.setFile(filePath);
+        QListWidgetItem *item = new QListWidgetItem;
+        item->setData(Qt::UserRole,temp.absoluteFilePath());
+        item->setText(temp.fileName());
+        ui->fileList->addItem(item);
+        file.insert(filePath); //将文件绝对路径加入到集合中
+    }
+
+    ui->playWidget->setCurrentWidget(ui->videoPage);
+    _player->setFilename(filePath);
+    _player->play();
+    preview_player->setFilename(filePath);
+    preview_player->play_preview();
+
+}
 
 void MainWindow::on_openDirBtn_clicked()
 {
@@ -317,21 +337,8 @@ void MainWindow::on_openDirBtn_clicked()
     }
     delete dir;
 
-    if(fileInfo.count() == 0)
+    if(fileInfo.count() != 0)
     {
-        ui->playBtn->setEnabled(false);
-        ui->stopBtn->setEnabled(false);
-        ui->timeSlider->setEnabled(false);
-        ui->volumnSlider->setEnabled(false);
-        ui->nextMediaBtn->setEnabled(false);
-        ui->lastMediaBtn->setEnabled(false);
-        ui->speed3sBtn->setEnabled(false);
-        ui->back3sBtn->setEnabled(false);
-        ui->mutipleSpeed->setEnabled(false);
-        ui->muteBtn->setEnabled(false);
-        ui->listBtn->setEnabled(false);
-
-
         ui->durationLabel->setText(getTimeText(0));
         ui->timeSlider->setValue(0);
         ui->videoWidget->resize(0.8*ui->playWidget->width(),ui->playWidget->height());
@@ -345,19 +352,6 @@ void MainWindow::on_openDirBtn_clicked()
         ui->playWidget->setCurrentWidget(ui->videoPage);
     }
 }
-
-
-void MainWindow::on_nextMediaBtn_clicked()
-{
-
-}
-
-
-void MainWindow::on_lastMediaBtn_clicked()
-{
-
-}
-
 
 void MainWindow::on_addFileBtn_clicked()
 {
@@ -375,12 +369,11 @@ void MainWindow::on_addFileBtn_clicked()
         item->setData(Qt::UserRole,temp.absoluteFilePath());
         item->setText(temp.fileName());
         ui->fileList->addItem(item);
-
         file.insert(filePath); //将文件绝对路径加入到集合中
     }
 
     ui->playWidget->setCurrentWidget(ui->videoPage);
-
+    ui->fileList->update();
 
     _player->setFilename(filePath);
     _player->play();
@@ -437,18 +430,7 @@ void MainWindow::on_addFolderBtn_clicked()
 
 void MainWindow::on_clearListBtn_clicked()
 {
-
+    ui->fileList->clear();
 }
 
-
-void MainWindow::on_back3sBtn_clicked()
-{
-    ui->timeSlider->changeValue(-10);
-}
-
-
-void MainWindow::on_speed3sBtn_clicked()
-{
-    ui->timeSlider->changeValue(10);
-}
 
