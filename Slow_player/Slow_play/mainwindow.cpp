@@ -6,6 +6,8 @@
 #include <QDebug>
 #include <QMessageBox>
 #include <qlistwidget.h>
+#include <QLineEdit>
+#include <QStandardItemModel>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -47,11 +49,18 @@ MainWindow::MainWindow(QWidget *parent)
     //音量设置
     ui->volumnSlider->setRange(VideoPlayer::Volumn::Min,VideoPlayer::Volumn::Max);
     ui->volumnSlider->setValue(ui->volumnSlider->maximum() >> 1);
+
+    ui->mutipleSpeed->setCurrentIndex(2);
+//    ui->mutipleSpeed->setEditable(true);
+//    ui->mutipleSpeed->lineEdit()->setAlignment(Qt::AlignCenter);
+//    ui->mutipleSpeed->lineEdit()->setReadOnly(true);
+    static_cast<QStandardItemModel*>(ui->mutipleSpeed->model())->item(0)->setTextAlignment(Qt::AlignCenter);
+    static_cast<QStandardItemModel*>(ui->mutipleSpeed->model())->item(1)->setTextAlignment(Qt::AlignCenter);
+    static_cast<QStandardItemModel*>(ui->mutipleSpeed->model())->item(2)->setTextAlignment(Qt::AlignCenter);
+    static_cast<QStandardItemModel*>(ui->mutipleSpeed->model())->item(3)->setTextAlignment(Qt::AlignCenter);
 }
 
 MainWindow::~MainWindow() {
-
-
     delete ui;
     delete _player;
     delete preview_player;
@@ -433,4 +442,23 @@ void MainWindow::on_clearListBtn_clicked()
     ui->fileList->clear();
 }
 
+
+
+void MainWindow::on_mutipleSpeed_currentIndexChanged(int index)
+{
+    _player->setSpeed(4-index);
+}
+
+
+
+
+void MainWindow::on_fillBtn_clicked()
+{
+    if(!this->isFullScreen()){
+
+        this->showFullScreen();
+    }else{
+        this->showNormal();
+    }
+}
 

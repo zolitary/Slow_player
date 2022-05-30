@@ -215,6 +215,31 @@ int VideoPlayer::decodeAudio() {
         return 0;
     } else RET(avcodec_receive_frame);
 
+    //解码后数据送入过滤器
+
+    switch(currentSpeedIndex){
+    case 1:
+        av_buffersrc_add_frame(srcFilterCtx_1,_aSwrInFrame);
+        av_buffersink_get_frame(sinkFilterCtx_1,_aSwrInFrame);
+        break;
+    case 2:
+        av_buffersrc_add_frame(srcFilterCtx_2,_aSwrInFrame);
+        av_buffersink_get_frame(sinkFilterCtx_2,_aSwrInFrame);
+        break;
+    case 3:
+        av_buffersrc_add_frame(srcFilterCtx_3,_aSwrInFrame);
+        av_buffersink_get_frame(sinkFilterCtx_3,_aSwrInFrame);
+        break;
+    case 4:
+        av_buffersrc_add_frame(srcFilterCtx_4,_aSwrInFrame);
+        av_buffersink_get_frame(sinkFilterCtx_4,_aSwrInFrame);
+        break;
+    default:
+        av_buffersrc_add_frame(srcFilterCtx_2,_aSwrInFrame);
+        av_buffersink_get_frame(sinkFilterCtx_2,_aSwrInFrame);
+    };
+
+
     // 重采样输出的样本数
     //a*b/c 向上取整
     int outSamples=av_rescale_rnd(_aSwrOutSpec.sampleRate,

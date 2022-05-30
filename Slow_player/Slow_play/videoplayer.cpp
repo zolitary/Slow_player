@@ -134,6 +134,12 @@ void VideoPlayer::readFile() {
         return;
     }
 
+    //初始化倍数过滤器
+    initFilter(&graph_1, &srcFilterCtx_1, &sinkFilterCtx_1, "0.5");
+    initFilter(&graph_2, &srcFilterCtx_2, &sinkFilterCtx_2, "1.0");
+    initFilter(&graph_3, &srcFilterCtx_3, &sinkFilterCtx_3, "1.5");
+    initFilter(&graph_4, &srcFilterCtx_4, &sinkFilterCtx_4, "2.0");
+
     emit initFinished(this);
 
     setState(Playing);
@@ -494,6 +500,7 @@ void VideoPlayer::free() {
     _seekTime = -1;
     freeAudio();
     freeVideo();
+    freeFilter();
 }
 
 void VideoPlayer::fataError() {
@@ -508,3 +515,129 @@ void VideoPlayer::updateSignal(){
     _previewMutex.unlock();
 }
 
+int VideoPlayer::initFilter(AVFilterGraph **graph, AVFilterContext **srcFilterCtx, AVFilterContext **sinkFilterCtx, char *value) {
+    //注册过滤器
+    //avfilter_register_all();
+    *graph = avfilter_graph_alloc();
+
+    //源过滤器和格式转换过滤器参数
+    std::string s1="sample_rate="+std::to_string(_aDecodeCtx->sample_rate)+":sample_fmt="+av_get_sample_fmt_name(_aDecodeCtx->sample_fmt)+":channel_layout="+std::to_string(_aDecodeCtx->channel_layout);
+    std::string s2="sample_rates="+std::to_string(_aDecodeCtx->sample_rate)+":sample_fmts="+av_get_sample_fmt_name(_aDecodeCtx->sample_fmt)+":channel_layouts="+std::to_string(_aDecodeCtx->channel_layout);
+
+    //创建源过滤器
+    const AVFilter *srcFilter=avfilter_get_by_name("abuffer");
+    *srcFilterCtx=avfilter_graph_alloc_filter(*graph,srcFilter,"src");
+    if (avfilter_init_str(*srcFilterCtx, s1.c_str()) < 0) {
+        qDebug()<<"初始化源过滤器失败";
+        return -1;
+    }
+
+
+    //创建变速过滤器
+    const AVFilter *atempoFilter = avfilter_get_by_name("atempo");
+    AVFilterContext *atempoFilterCtx = avfilter_graph_alloc_filter(*graph, atempoFilter, "atempo");
+    AVDictionary *args = NULL;
+    av_dict_set(&args, "tempo", value, 0);//根据value的值调节速度
+    if (avfilter_init_dict(atempoFilterCtx, &args) < 0) {
+        qDebug()<<"初始化变速过滤器失败";
+        return -1;
+    }
+
+
+    //创建格式转化过滤器
+    const AVFilter *aformatFilter = avfilter_get_by_name("aformat");
+    AVFilterContext *aformatFilterCtx = avfilter_graph_alloc_filter(*graph, aformatFilter, "aformat");
+    if (avfilter_init_str(aformatFilterCtx, s2.c_str()) < 0) {
+        qDebug()<<"初始化格式转化过滤器失败";
+        return -1;
+    }
+
+
+    //创建接收过滤器
+    const AVFilter *sinkFilter=avfilter_get_by_name("abuffersink");
+    *sinkFilterCtx=avfilter_graph_alloc_filter(*graph,sinkFilter,"sink");
+    if (avfilter_init_dict(*sinkFilterCtx, NULL) < 0) {
+        qDebug()<<"初始化变速过滤器失败";
+        return -1;
+    }
+
+    //链接过滤器
+    if(avfilter_link(*srcFilterCtx,0,atempoFilterCtx,0) != 0){
+        qDebug()<<"没link成功变速过滤器";
+        return -1;
+    }
+    if(avfilter_link(atempoFilterCtx,0,aformatFilterCtx,0) != 0){
+        qDebug()<<"没link成功格式转化过滤器";
+        return -1;
+    }
+    if(avfilter_link(aformatFilterCtx,0,*sinkFilterCtx,0) != 0){
+        qDebug()<<"没link成功接收过滤器";
+        return -1;
+    }
+
+
+    //配置图
+    if (avfilter_graph_config(*graph, NULL) < 0) {
+        qDebug()<<"配置graph失败";
+        return -1;
+    }
+
+    return 0;
+}
+
+void VideoPlayer::freeFilter() {
+
+    if(srcFilterCtx_1 != nullptr){
+        avfilter_free(srcFilterCtx_1);
+        srcFilterCtx_1 = nullptr;
+    }
+    if(sinkFilterCtx_1 != nullptr){
+        avfilter_free(sinkFilterCtx_1);
+        sinkFilterCtx_1 = nullptr;
+    }
+    if(graph_1 != nullptr){
+        avfilter_graph_free(&graph_1);
+        graph_1 = nullptr;
+    }
+    if(srcFilterCtx_2 != nullptr){
+        avfilter_free(srcFilterCtx_2);
+        srcFilterCtx_2 = nullptr;
+    }
+    if(sinkFilterCtx_2 != nullptr){
+        avfilter_free(sinkFilterCtx_2);
+        sinkFilterCtx_2 = nullptr;
+    }
+    if(graph_2 != nullptr){
+        avfilter_graph_free(&graph_2);
+        graph_2 = nullptr;
+    }
+    if(srcFilterCtx_3 != nullptr){
+        avfilter_free(srcFilterCtx_3);
+        srcFilterCtx_3 = nullptr;
+    }
+    if(sinkFilterCtx_3 != nullptr){
+        avfilter_free(sinkFilterCtx_3);
+        sinkFilterCtx_3 = nullptr;
+    }
+    if(graph_3 != nullptr){
+        avfilter_graph_free(&graph_3);
+        graph_3 = nullptr;
+    }
+    if(srcFilterCtx_4 != nullptr){
+        avfilter_free(srcFilterCtx_4);
+        srcFilterCtx_4 = nullptr;
+    }
+    if(sinkFilterCtx_4 != nullptr){
+        avfilter_free(sinkFilterCtx_4);
+        sinkFilterCtx_4 = nullptr;
+    }
+    if(graph_4 != nullptr){
+        avfilter_graph_free(&graph_4);
+        graph_4 = nullptr;
+    }
+}
+
+void VideoPlayer::setSpeed(int index)
+{
+    currentSpeedIndex=index;
+}

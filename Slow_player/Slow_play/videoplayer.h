@@ -11,6 +11,9 @@ extern "C" {
 #include <libavutil/avutil.h>
 #include <libswresample/swresample.h>
 #include <libswscale/swscale.h>
+#include <libavfilter/avfilter.h>
+#include <libavfilter/buffersrc.h>
+#include <libavfilter/buffersink.h>
 }
 
 #define ERROR_BUF \
@@ -75,6 +78,7 @@ public:
     void setMute(bool mute);//静音
     bool isMute();
     void updateSignal();
+    void setSpeed(int index);//设置倍数播放
 
 signals:
     void stateChanged(VideoPlayer *player);
@@ -159,6 +163,27 @@ private:
     void freeAudio();
     void freeVideo();
     void fataError();//错误处理
+
+
+    //直接保存四个过滤器（0.5\1.0\1.5\2.0)
+    int currentSpeedIndex=2;
+    AVFilterGraph *graph_1 = nullptr;//过滤器链接图
+    AVFilterContext *srcFilterCtx_1 = nullptr, *sinkFilterCtx_1 = nullptr;//过滤器源和接收过滤器上下文
+
+    AVFilterGraph *graph_2 = nullptr;//过滤器链接图
+    AVFilterContext *srcFilterCtx_2 = nullptr, *sinkFilterCtx_2 = nullptr;//过滤器源和接收过滤器上下文
+
+    AVFilterGraph *graph_3 = nullptr;//过滤器链接图
+    AVFilterContext *srcFilterCtx_3 = nullptr, *sinkFilterCtx_3 = nullptr;//过滤器源和接收过滤器上下文
+
+    AVFilterGraph *graph_4 = nullptr;//过滤器链接图
+    AVFilterContext *srcFilterCtx_4 = nullptr, *sinkFilterCtx_4 = nullptr;//过滤器源和接收过滤器上下文
+
+    int initFilter(AVFilterGraph **graph, AVFilterContext **srcFilterCtx, AVFilterContext **sinkFilterCtx, char *value);//初始化过滤器
+    void freeFilter();//释放过滤器
+
+
+
 
 
 };

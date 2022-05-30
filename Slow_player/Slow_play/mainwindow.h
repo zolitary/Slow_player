@@ -47,6 +47,12 @@ private slots:
     void on_back3sBtn_clicked();
     void on_speed3sBtn_clicked();
 
+    void on_mutipleSpeed_currentIndexChanged(int index);
+
+
+
+    void on_fillBtn_clicked();
+
 private:
     Ui::MainWindow *ui;
     VideoPlayer *_player, *preview_player;

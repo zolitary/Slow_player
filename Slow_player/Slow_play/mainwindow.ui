@@ -481,7 +481,40 @@
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_4">
             <item>
-             <widget class="QComboBox" name="mutipleSpeed"/>
+             <widget class="QComboBox" name="mutipleSpeed">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="layoutDirection">
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="currentIndex">
+               <number>2</number>
+              </property>
+              <item>
+               <property name="text">
+                <string>x2</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>x1.5</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>x1</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>x0.5</string>
+               </property>
+              </item>
+             </widget>
             </item>
             <item>
              <widget class="QPushButton" name="muteBtn">
