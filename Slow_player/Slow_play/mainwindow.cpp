@@ -53,9 +53,6 @@ MainWindow::MainWindow(QWidget *parent)
     ui->volumnSlider->setValue(ui->volumnSlider->maximum() >> 1);
 
     ui->mutipleSpeed->setCurrentIndex(2);
-//    ui->mutipleSpeed->setEditable(true);
-//    ui->mutipleSpeed->lineEdit()->setAlignment(Qt::AlignCenter);
-//    ui->mutipleSpeed->lineEdit()->setReadOnly(true);
     static_cast<QStandardItemModel*>(ui->mutipleSpeed->model())->item(0)->setTextAlignment(Qt::AlignCenter);
     static_cast<QStandardItemModel*>(ui->mutipleSpeed->model())->item(1)->setTextAlignment(Qt::AlignCenter);
     static_cast<QStandardItemModel*>(ui->mutipleSpeed->model())->item(2)->setTextAlignment(Qt::AlignCenter);
@@ -502,7 +499,6 @@ void MainWindow::loadFile()
         item = QString::fromUtf8(strBytes);
         item = item.left(item.size()-1);
         fileList.append(item);
-        qDebug()<<item;
     }
     fd.close();
 
