@@ -23,6 +23,8 @@ MainWindow::MainWindow(QWidget *parent)
     qRegisterMetaType<VideoPlayer::VideoSwsSpec>("VideoSwsSpec&");
     _player = new VideoPlayer();
     preview_player = new VideoPlayer();
+        
+    loadFile();
 
     connect(_player, &VideoPlayer::stateChanged,
             this, &MainWindow::onPlayerStateChanged);
@@ -61,6 +63,7 @@ MainWindow::MainWindow(QWidget *parent)
 }
 
 MainWindow::~MainWindow() {
+    saveFile();
     
     //释放线程
     _player->stop();
@@ -299,7 +302,7 @@ void MainWindow::on_openFileBtn_clicked() {
                                                       );
 
     if(filePath==nullptr) return;//没有成功打开文件
-    if(!file.contains(filePath))//不与已有文件重复的情况下
+    if(!fileList.contains(filePath))//不与已有文件重复的情况下
     {
         QFileInfo temp;
         temp.setFile(filePath);
@@ -307,7 +310,7 @@ void MainWindow::on_openFileBtn_clicked() {
         item->setData(Qt::UserRole,temp.absoluteFilePath());
         item->setText(temp.fileName());
         ui->fileList->addItem(item);
-        file.insert(filePath); //将文件绝对路径加入到集合中
+        fileList.append(filePath);
     }
 
     ui->playWidget->setCurrentWidget(ui->videoPage);
@@ -340,9 +343,9 @@ void MainWindow::on_openDirBtn_clicked()
     QList fileInfo = dir->entryInfoList(QDir::Files | QDir::CaseSensitive);//过滤条件为只限文件并区分大小写
     for(int i = 0;i < fileInfo.count(); i++)
     {
-        if(!file.contains(fileInfo.at(i).absoluteFilePath()))//不与已有文件重复的情况下
+        if(!fileList.contains(fileInfo.at(i).absoluteFilePath()))//不与已有文件重复的情况下
         {
-            file.insert(fileInfo.at(i).absoluteFilePath());//加入到集合中
+            fileList.append(fileInfo.at(i).absoluteFilePath());//加入到集合中
 
             QListWidgetItem *item = new QListWidgetItem;
             item->setData(Qt::UserRole,fileInfo.at(i).absoluteFilePath());
@@ -376,7 +379,7 @@ void MainWindow::on_addFileBtn_clicked()
                                                       "多媒体文件 (*.mp4 *.avi *.mkv *.mp3 *.aac *.mov *.ts)"
                                                       );
 
-    if(!file.contains(filePath))//不与已有文件重复的情况下
+    if(!fileList.contains(filePath))//不与已有文件重复的情况下
     {
         QFileInfo temp;
         temp.setFile(filePath);
@@ -384,7 +387,7 @@ void MainWindow::on_addFileBtn_clicked()
         item->setData(Qt::UserRole,temp.absoluteFilePath());
         item->setText(temp.fileName());
         ui->fileList->addItem(item);
-        file.insert(filePath); //将文件绝对路径加入到集合中
+        fileList.append(filePath); //将文件绝对路径加入到集合中
     }
 
     ui->playWidget->setCurrentWidget(ui->videoPage);
@@ -417,9 +420,9 @@ void MainWindow::on_addFolderBtn_clicked()
     QList fileInfo = dir->entryInfoList(QDir::Files | QDir::CaseSensitive);//过滤条件为只限文件并区分大小写
     for(int i = 0;i < fileInfo.count(); i++)
     {
-        if(!file.contains(fileInfo.at(i).absoluteFilePath()))//不与已有文件重复的情况下
+        if(!fileList.contains(fileInfo.at(i).absoluteFilePath()))//不与已有文件重复的情况下
         {
-            file.insert(fileInfo.at(i).absoluteFilePath());//加入到集合中
+            fileList.append(fileInfo.at(i).absoluteFilePath());//加入到集合中
 
             QListWidgetItem *item = new QListWidgetItem;
             item->setData(Qt::UserRole,fileInfo.at(i).absoluteFilePath());
@@ -466,5 +469,54 @@ void MainWindow::on_fillBtn_clicked()
     }else{
         this->showNormal();
     }
+}
+
+void MainWindow::saveFile()
+{
+    QFile fd("listItem.txt");
+    if (!fd.open(QIODevice::WriteOnly | QIODevice::Text))
+        return;
+    QByteArray  strBytes;
+    QString item;
+    for(int i=0;i<fileList.count();i++)
+    {
+        item = fileList[i]+"\n";
+        strBytes = item.toUtf8();//转换为字节数组
+        fd.write(strBytes,strBytes.length());  //写入文件
+    }
+    fd.close();
+}
+
+void MainWindow::loadFile()
+{
+    //读取文件
+    QFile fd("listItem.txt");
+    if(!fd.open(QIODevice::ReadOnly | QIODevice::Text))
+        return ;
+    QByteArray strBytes;
+    QString item;
+    while(!fd.atEnd())
+    {
+
+        strBytes =  fd.readLine();
+        item = QString::fromUtf8(strBytes);
+        item = item.left(item.size()-1);
+        fileList.append(item);
+        qDebug()<<item;
+    }
+    fd.close();
+
+
+    //将视频加入到播放列表
+    QFileInfo temp;
+    for(int i=0;i<fileList.count();i++){
+
+        temp.setFile(fileList[i]);
+        QListWidgetItem *item = new QListWidgetItem;
+        item->setData(Qt::UserRole,temp.absoluteFilePath());
+        item->setText(temp.fileName());
+        ui->fileList->addItem(item);
+    }
+
 }
 
