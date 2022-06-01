@@ -6,6 +6,7 @@
 #include "videoslider.h"
 #include "videowidget.h"
 #include <qlistwidget.h>
+#include <QVector>
 QT_BEGIN_NAMESPACE
 namespace Ui {
     class MainWindow;
@@ -58,7 +59,11 @@ private:
     VideoPlayer *_player, *preview_player;
     VideoWidget *preview;
     QString getTimeText(int value);
-    QSet<QString> file;//根据文件绝对路径判断是否重复
-    QSet<QString>::iterator index;          //记录当前播放文件在播放列表中位置
+    
+    QVector<QString> fileList;//文件列表
+    int listIndex;//当前播放文件在播放列表中位置
+
+    void saveFile();
+    void loadFile();
 };
 #endif // MAINWINDOW_H
