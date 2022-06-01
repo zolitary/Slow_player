@@ -25,6 +25,7 @@ MainWindow::MainWindow(QWidget *parent)
     preview_player = new VideoPlayer();
         
     loadFile();
+    listIndex = 0;
 
     connect(_player, &VideoPlayer::stateChanged,
             this, &MainWindow::onPlayerStateChanged);
@@ -234,6 +235,13 @@ void MainWindow::on_fileList_itemDoubleClicked(QListWidgetItem *item)
     }
 
     QString fileAbsolutePath = item->data(Qt::UserRole).toString();
+    
+    for(int i=0;i<fileList.count();i++)
+    {
+        if(fileAbsolutePath == fileList[i]){
+            listIndex = i;
+        }
+    }
 
     _player->setFilename(fileAbsolutePath);
     _player->play();
@@ -282,12 +290,48 @@ void MainWindow::on_speed3sBtn_clicked()
 
 void MainWindow::on_nextMediaBtn_clicked()
 {
+    //若正在播放则清除播放帧，重新打开文件
+    VideoPlayer::State state = _player->getState();
+    if (state == VideoPlayer::Playing)
+    {
+        _player->stop();
+        preview_player->stopwithSignal();
+    }
+
+    listIndex += 1;
+    if(listIndex==fileList.count())
+    {
+        listIndex = 0;
+    }
+
+    _player->setFilename(fileList[listIndex]);
+    _player->play();
+    preview_player->setFilename(fileList[listIndex]);
+    preview_player->play_preview();
 
 }
 
 
 void MainWindow::on_lastMediaBtn_clicked()
 {
+    //若正在播放则清除播放帧，重新打开文件
+    VideoPlayer::State state = _player->getState();
+    if (state == VideoPlayer::Playing)
+    {
+        _player->stop();
+        preview_player->stopwithSignal();
+    }
+
+    listIndex -= 1;
+    if(listIndex < 0)
+    {
+        listIndex = fileList.count() - 1;
+    }
+
+    _player->setFilename(fileList[listIndex]);
+    _player->play();
+    preview_player->setFilename(fileList[listIndex]);
+    preview_player->play_preview();
 
 }
 
@@ -311,6 +355,14 @@ void MainWindow::on_openFileBtn_clicked() {
     }
 
     ui->playWidget->setCurrentWidget(ui->videoPage);
+    
+    for(int i=0;i<fileList.count();i++)
+    {
+        if(filePath == fileList[i]){
+            listIndex = i;
+        }
+    }
+    
     _player->setFilename(filePath);
     _player->play();
     preview_player->setFilename(filePath);
@@ -389,6 +441,13 @@ void MainWindow::on_addFileBtn_clicked()
 
     ui->playWidget->setCurrentWidget(ui->videoPage);
     ui->fileList->update();
+    
+    for(int i=0;i<fileList.count();i++)
+    {
+        if(filePath == fileList[i]){
+            listIndex = i;
+        }
+    }
 
     _player->setFilename(filePath);
     _player->play();
@@ -446,6 +505,7 @@ void MainWindow::on_addFolderBtn_clicked()
 void MainWindow::on_clearListBtn_clicked()
 {
     ui->fileList->clear();
+    fileList.clear();
 }
 
 
