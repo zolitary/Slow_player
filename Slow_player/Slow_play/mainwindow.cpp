@@ -427,7 +427,7 @@ void MainWindow::on_addFileBtn_clicked()
                                                       "/home", //初始路径
                                                       "多媒体文件 (*.mp4 *.avi *.mkv *.mp3 *.aac *.mov *.ts)"
                                                       );
-
+    if(filePath==nullptr) return;//没有成功打开文件
     if(!fileList.contains(filePath))//不与已有文件重复的情况下
     {
         QFileInfo temp;
