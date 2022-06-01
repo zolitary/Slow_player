@@ -61,6 +61,12 @@ MainWindow::MainWindow(QWidget *parent)
 }
 
 MainWindow::~MainWindow() {
+    
+    //释放线程
+    _player->stop();
+    preview_player->stopwithSignal();
+    
+    //释放资源
     delete ui;
     delete _player;
     delete preview_player;
