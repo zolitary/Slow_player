@@ -286,6 +286,11 @@ void MainWindow::on_speed3sBtn_clicked()
 
 void MainWindow::on_nextMediaBtn_clicked()
 {
+    if(fileList.count()==0)
+    {
+        QMessageBox::information(NULL,"当前列表为空","当前列表为空，无法切换下一个视频！",QMessageBox::Yes);
+        return;
+    }
     //若正在播放则清除播放帧，重新打开文件
     VideoPlayer::State state = _player->getState();
     if (state == VideoPlayer::Playing)
@@ -310,6 +315,11 @@ void MainWindow::on_nextMediaBtn_clicked()
 
 void MainWindow::on_lastMediaBtn_clicked()
 {
+    if(fileList.count()==0)
+    {
+        QMessageBox::information(NULL,"当前列表为空","当前列表为空，无法切换上一个视频！",QMessageBox::Yes);
+        return;
+    }
     //若正在播放则清除播放帧，重新打开文件
     VideoPlayer::State state = _player->getState();
     if (state == VideoPlayer::Playing)
