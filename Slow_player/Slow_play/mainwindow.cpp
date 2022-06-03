@@ -30,6 +30,7 @@ MainWindow::MainWindow(QWidget *parent)
         
     loadFile();
     listIndex = 0;
+    setFocusPolicy(Qt::StrongFocus);//获取键盘监听
 
     connect(_player, &VideoPlayer::stateChanged,
             this, &MainWindow::onPlayerStateChanged);
@@ -576,4 +577,74 @@ void MainWindow::mousePressEvent(QMouseEvent *ev){
         fmtw.show();
     }
 }
+
+void MainWindow::keyPressEvent(QKeyEvent * event)
+{
+    VideoPlayer::State state = _player->getState();
+    if (state != VideoPlayer::Stopped) {
+        //空格暂停或播放
+        if(event->key() == Qt::Key_Space){
+            state = _player->getState();
+            if (state == VideoPlayer::Playing) {
+                _player->pause();
+            } else {
+                _player->play();
+            }
+        }
+        //方向键右键，前进3秒
+        else if(event->key() == Qt::Key_Right){
+            state = _player->getState();
+            if(state != VideoPlayer::Stopped)
+            {
+                ui->timeSlider->changeValue(3);
+            }
+        }
+        //方向键左键，后退3秒
+        else if(event->key() == Qt::Key_Left){
+            state = _player->getState();
+            if(state != VideoPlayer::Stopped)
+            {
+                ui->timeSlider->changeValue(-3);
+            }
+
+        }
+        //方向键上键，调高音量5
+        else if(event->key() == Qt::Key_Up){
+            int value = ui->volumnSlider->value();
+            value += 5;
+            if(value>100) value = 100;
+            ui->volumnLabel->setText(QString("%1").arg(value));
+            ui->volumnSlider->setValue(value);
+
+            //调整音量时解除静音
+            if(_player->isMute())
+            {
+                ui->muteBtn->setIcon(QIcon(":/new/prefix/aloud.png"));
+                _player->setMute(false);
+            }
+
+            _player->setVolumn(value);
+
+        }
+        //方向键下键，调低音量5
+        else if(event->key() == Qt::Key_Down){
+            int value = ui->volumnSlider->value();
+            value -= 5;
+            if(value<0) value = 0;
+            ui->volumnLabel->setText(QString("%1").arg(value));
+            ui->volumnSlider->setValue(value);
+
+            //调整音量时解除静音
+            if(_player->isMute())
+            {
+                ui->muteBtn->setIcon(QIcon(":/new/prefix/aloud.png"));
+                _player->setMute(false);
+            }
+
+            _player->setVolumn(value);
+
+        }
+    }
+}
+
 
