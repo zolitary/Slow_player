@@ -66,6 +66,7 @@ private:
     QVector<QString> fileList;//文件列表
 
     void mousePressEvent(QMouseEvent *ev) override;//获取视频信息
+    void keyPressEvent(QKeyEvent * event) override;//快捷键
     int listIndex;//当前播放文件在播放列表中位置
 
     void saveFile();
