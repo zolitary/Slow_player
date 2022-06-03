@@ -1,5 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "informationwindow.h"
+#include "ui_informationwindow.h"
 #include <QFileDialog>
 #include <thread>
 #include <time.h>
@@ -8,6 +10,8 @@
 #include <qlistwidget.h>
 #include <QLineEdit>
 #include <QStandardItemModel>
+#include <QMouseEvent>
+#include <QPushButton>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -129,7 +133,7 @@ void MainWindow::onPlayerStateChanged(VideoPlayer *player) {
         ui->timeSlider->setValue(0);
 
         //返回打开文件
-        ui->playWidget->setCurrentWidget(ui->openFilePage);
+        //ui->playWidget->setCurrentWidget(ui->openFilePage);
     } else {
         ui->playBtn->setEnabled(true);
         ui->stopBtn->setEnabled(true);
@@ -574,5 +578,12 @@ void MainWindow::loadFile()
         ui->fileList->addItem(item);
     }
 
+}
+
+void MainWindow::mousePressEvent(QMouseEvent *ev){
+    if(ev->button()==Qt::RightButton){
+        fmtw.updateinformation(_player->get_fmtCtx(),_player->getfilename());
+        fmtw.show();
+    }
 }
 

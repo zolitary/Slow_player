@@ -5,6 +5,8 @@
 #include "videoplayer.h"
 #include "videoslider.h"
 #include "videowidget.h"
+#include "informationwindow.h"
+#include "ui_informationwindow.h"
 #include <qlistwidget.h>
 #include <QVector>
 QT_BEGIN_NAMESPACE
@@ -59,8 +61,11 @@ private:
     VideoPlayer *_player, *preview_player;
     VideoWidget *preview;
     QString getTimeText(int value);
+    informationWindow fmtw;
     
     QVector<QString> fileList;//文件列表
+
+    void mousePressEvent(QMouseEvent *ev) override;//获取视频信息
     int listIndex;//当前播放文件在播放列表中位置
 
     void saveFile();

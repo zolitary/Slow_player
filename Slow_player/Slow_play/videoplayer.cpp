@@ -641,3 +641,11 @@ void VideoPlayer::setSpeed(int index)
 {
     currentSpeedIndex=index;
 }
+
+AVFormatContext* VideoPlayer::get_fmtCtx(){
+    return _fmtCtx;
+}
+
+char* VideoPlayer::getfilename(){
+    return _filename;
+}

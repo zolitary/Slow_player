@@ -11,6 +11,7 @@ CONFIG += c++11
 
 SOURCES += \
     condmutex.cpp \
+    informationwindow.cpp \
     main.cpp \
     mainwindow.cpp \
     videoplayer.cpp \
@@ -22,12 +23,14 @@ SOURCES += \
 HEADERS += \
     ../../../../../Desktop/sl/audio-video-dev-tutorial-main 2/condmutex.h \
     condmutex.h \
+    informationwindow.h \
     mainwindow.h \
     videoplayer.h \
     videoslider.h \
     videowidget.h
 
 FORMS += \
+    informationwindow.ui \
     mainwindow.ui
 
 win32:{

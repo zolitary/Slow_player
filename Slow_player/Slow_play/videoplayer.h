@@ -79,6 +79,8 @@ public:
     bool isMute();
     void updateSignal();
     void setSpeed(int index);//设置倍数播放
+    AVFormatContext* get_fmtCtx();
+    char* getfilename();
 
 signals:
     void stateChanged(VideoPlayer *player);
