@@ -149,13 +149,10 @@ void MainWindow::onPlayerStateChanged(VideoPlayer *player) {
 
         //进入播放洁面（先调整界面再进入不会有闪烁）
 
-        ui->videoWidget->resize(0.8*ui->playWidget->width(),ui->playWidget->height());
-        ui->listBtn->move(ui->videoWidget->width() - ui->listBtn->width(),ui->videoWidget->height() * 0.5);
-        ui->addFileBtn->move(ui->videoWidget->width(),0);
-        ui->addFolderBtn->move(ui->videoWidget->width()  + ui->addFolderBtn->width(),0);
-        ui->clearListBtn->move(ui->videoWidget->width()  + 2*ui->addFolderBtn->width(),0);
-        ui->fileList->resize(ui->playWidget->width() - ui->videoWidget->width(), ui->playWidget->height() - ui->addFileBtn->height());
-        ui->fileList->move(ui->videoWidget->width(), ui->addFileBtn->height());
+        if(ui->fileList->isHidden())
+        {
+            on_listBtn_clicked();
+        }
         ui->playWidget->setCurrentWidget(ui->videoPage);
     }
 }
@@ -195,9 +192,7 @@ void MainWindow::on_playBtn_clicked() {
 void MainWindow::on_listBtn_clicked()
 {
     if(!ui->fileList->isHidden())//播放列表为打开状态
-    {
-
-        ui->listBtn->move((ui->playWidget->width() - ui->listBtn->width()),0.5*ui->playWidget->height() - ui->listBtn->height());
+    {  
         ui->fileList->hide();
         ui->addFileBtn->hide();
         ui->addFolderBtn->hide();
@@ -210,13 +205,9 @@ void MainWindow::on_listBtn_clicked()
     else
     {
         ui->videoWidget->resize(0.8*ui->playWidget->width(),ui->playWidget->height());
-        ui->listBtn->move(ui->videoWidget->width() - ui->listBtn->width(),ui->videoWidget->height() * 0.5);
+        ui->fileList->resize(0.2*ui->playWidget->width(), ui->playWidget->height());
 
-        ui->addFileBtn->move(ui->videoWidget->width(),0);
-        ui->addFolderBtn->move(ui->videoWidget->width()  + ui->addFolderBtn->width(),0);
-        ui->clearListBtn->move(ui->videoWidget->width()  + 2*ui->addFolderBtn->width(),0);
-        ui->fileList->resize(ui->playWidget->width() - ui->videoWidget->width(), ui->playWidget->height() - ui->addFileBtn->height());
-        ui->fileList->move(ui->videoWidget->width(), ui->addFileBtn->height());
+        ui->fileList->move(ui->videoWidget->width(),0);
 
         ui->fileList->show();
         ui->addFileBtn->show();
@@ -518,7 +509,6 @@ void MainWindow::on_mutipleSpeed_currentIndexChanged(int index)
 {
     _player->setSpeed(4-index);
 }
-
 
 
 

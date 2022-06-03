@@ -30,7 +30,7 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="openFilePage">
        <layout class="QHBoxLayout" name="horizontalLayout_5">
@@ -121,32 +121,6 @@
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="listBtn">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="focusPolicy">
-           <enum>Qt::NoFocus</enum>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-          <property name="icon">
-           <iconset resource="icon/icon.qrc">
-            <normaloff>:/new/prefix/hideList.png</normaloff>:/new/prefix/hideList.png</iconset>
-          </property>
-          <property name="flat">
-           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -341,6 +315,9 @@
          <layout class="QHBoxLayout" name="horizontalLayout_2">
           <item>
            <widget class="QPushButton" name="back3sBtn">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="sizePolicy">
              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -364,6 +341,9 @@
           </item>
           <item>
            <widget class="QPushButton" name="lastMediaBtn">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="focusPolicy">
              <enum>Qt::NoFocus</enum>
             </property>
@@ -407,6 +387,9 @@
           </item>
           <item>
            <widget class="QPushButton" name="nextMediaBtn">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="focusPolicy">
              <enum>Qt::NoFocus</enum>
             </property>
@@ -424,6 +407,9 @@
           </item>
           <item>
            <widget class="QPushButton" name="speed3sBtn">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="focusPolicy">
              <enum>Qt::NoFocus</enum>
             </property>
@@ -611,21 +597,51 @@
              </spacer>
             </item>
             <item>
-             <widget class="QPushButton" name="fillBtn">
-              <property name="focusPolicy">
-               <enum>Qt::NoFocus</enum>
-              </property>
-              <property name="text">
-               <string/>
-              </property>
-              <property name="icon">
-               <iconset resource="icon/icon.qrc">
-                <normaloff>:/new/prefix/fill.png</normaloff>:/new/prefix/fill.png</iconset>
-              </property>
-              <property name="flat">
-               <bool>true</bool>
-              </property>
-             </widget>
+             <layout class="QHBoxLayout" name="horizontalLayout_8">
+              <item>
+               <widget class="QPushButton" name="listBtn">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="focusPolicy">
+                 <enum>Qt::NoFocus</enum>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="icon">
+                 <iconset resource="icon/icon.qrc">
+                  <normaloff>:/new/prefix/hideList.png</normaloff>:/new/prefix/hideList.png</iconset>
+                </property>
+                <property name="flat">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="fillBtn">
+                <property name="focusPolicy">
+                 <enum>Qt::NoFocus</enum>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="icon">
+                 <iconset resource="icon/icon.qrc">
+                  <normaloff>:/new/prefix/fill.png</normaloff>:/new/prefix/fill.png</iconset>
+                </property>
+                <property name="flat">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </item>
            </layout>
           </item>
