@@ -335,7 +335,7 @@ void VideoPlayer::startPreview() {
     }).detach();
 
     //从输入文件中读取数据
-    AVPacket pkt,keypkt,temp;
+    AVPacket keypkt,temp;
     while (_state != Stopped) {
         _previewMutex.lock();
         _previewMutex.wait();
@@ -363,7 +363,6 @@ void VideoPlayer::startPreview() {
             } else {
 
                 // 清空数据包
-                clearAudioPktList();
                 clearVideoPktList();
                 double Time = 0;
 
@@ -414,24 +413,11 @@ void VideoPlayer::startPreview() {
                             }
                         }
                     }
+                    _vSeekTime = _seekTime;
+                    _seekTime = -1;
+                    // 恢复时钟
+                    _vTime = 0;
 
-                    //定位到seekTime
-                    ts = _seekTime / av_q2d(timeBase);
-                    ret = av_seek_frame(_fmtCtx, streamIdx, ts, AVSEEK_FLAG_BACKWARD);
-                    if (ret < 0) { // seek失败
-                        qDebug() << "seek失败" << _seekTime << ts << streamIdx;
-                        _seekTime = -1;
-                    } else {
-                        //qDebug() << "seek成功" << Time << ts << streamIdx;
-                        clearAudioPktList();
-                        _vSeekTime = _seekTime;
-                        _aSeekTime = _seekTime;
-                        _seekTime = -1;
-                        // 恢复时钟
-                        _aTime = 0;
-                        _vTime = 0;
-
-                    }
                 }
 
             }
