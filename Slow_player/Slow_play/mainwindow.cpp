@@ -582,7 +582,7 @@ void MainWindow::loadFile()
 }
 
 void MainWindow::mousePressEvent(QMouseEvent *ev){
-    if(ev->button()==Qt::RightButton){
+    if(ev->button()==Qt::RightButton&&_player->getState()!=VideoPlayer::Stopped){
         fmtw.updateinformation(_player->get_fmtCtx(),_player->getfilename());
         fmtw.show();
     }
