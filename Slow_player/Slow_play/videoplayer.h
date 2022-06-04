@@ -139,6 +139,7 @@ private:
     bool _vCanFree = false;//视频资源是否可以释放
     int _vSeekTime = -1;//外面设置的当前播放时刻
     bool _hasVideo = false;//是否有视频流
+    int frameRate = 25;//视频帧率
 
     int initVideoInfo();//初始化视频信息
     int initSws();//初始化视频像素格式转换
