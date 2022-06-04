@@ -133,6 +133,11 @@ void MainWindow::onPlayerStateChanged(VideoPlayer *player) {
         ui->durationLabel->setText(getTimeText(0));
         ui->timeSlider->setValue(0);
 
+        if(ui->fileList->isHidden())
+        {
+            on_listBtn_clicked();
+        }
+        
         //返回打开文件
         //ui->playWidget->setCurrentWidget(ui->openFilePage);
     } else {
@@ -150,10 +155,6 @@ void MainWindow::onPlayerStateChanged(VideoPlayer *player) {
 
         //进入播放洁面（先调整界面再进入不会有闪烁）
 
-        if(ui->fileList->isHidden())
-        {
-            on_listBtn_clicked();
-        }
         ui->playWidget->setCurrentWidget(ui->videoPage);
     }
 }
@@ -653,6 +654,13 @@ void MainWindow::keyPressEvent(QKeyEvent * event)
 
             _player->setVolumn(value);
 
+        }
+        //esc键，退出全屏
+        else if(event->key() == Qt::Key_Escape){
+            if(this->isFullScreen()){
+
+                this->showNormal();
+            }
         }
     }
 }
