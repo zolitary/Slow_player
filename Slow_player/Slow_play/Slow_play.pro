@@ -75,3 +75,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
         icon/icon.qrc
+
+RC_ICONS=player.ico
