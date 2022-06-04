@@ -9,6 +9,9 @@ int VideoPlayer::initVideoInfo() {
     // 初始化解码器
     int ret = initDecoder(&_vDecodeCtx, &_vStream, AVMEDIA_TYPE_VIDEO);
     RET(initDecoder);
+        
+    //视频帧率
+    frameRate = _vStream->avg_frame_rate.num/_vStream->avg_frame_rate.den;
 
     // 初始化像素格式转换
     ret = initSws();
@@ -155,6 +158,7 @@ void VideoPlayer::decodeVideo() {
                 }
             } else {
                 //只有视频没有音频时候  时间基准处理
+                _sleep(1000/frameRate);
             }
 
             // 把像素格式转换后的图片数据，拷贝一份出来
