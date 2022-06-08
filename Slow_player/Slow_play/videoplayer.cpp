@@ -166,10 +166,15 @@ void VideoPlayer::readFile() {
                 streamIdx = _vStream->index;
             }
 #endif
-            if (_hasVideo) {
-                streamIdx = _vStream->index;
-            }else{
+//            if (_hasVideo) {
+//                streamIdx = _vStream->index;
+//            }else{
+//                streamIdx = _aStream->index;
+//            }
+            if (_hasAudio) {
                 streamIdx = _aStream->index;
+            }else{
+                streamIdx = _vStream->index;
             }
 
             //定位到seekTime前20秒
@@ -195,6 +200,7 @@ void VideoPlayer::readFile() {
                     if (ret == 0) {
                         if (keypkt.stream_index == _vStream->index) {
                             if(_vPktList.empty()){
+                                //只需要关键帧
                                 if(!(keypkt.flags &AV_PKT_FLAG_KEY)){
                                     continue;
                                 }
@@ -202,6 +208,7 @@ void VideoPlayer::readFile() {
                                 Time = av_q2d(_vStream->time_base) * keypkt.dts;
                                 if(Time > _seekTime){
                                     av_packet_unref(&keypkt);
+                                    //最近关键帧添加到视频包队列
                                     addVideoPkt(temp);
                                     break;
                                 }
@@ -214,7 +221,9 @@ void VideoPlayer::readFile() {
                     }
                 }
                 Time = av_q2d(_vStream->time_base) * temp.dts;
+                //关键帧的时间
                 ts = Time / av_q2d(timeBase);
+                //重新定位到关键帧
                 ret = av_seek_frame(_fmtCtx, streamIdx, ts, AVSEEK_FLAG_BACKWARD);
                 if (ret < 0) { // seek失败
                     qDebug() << "seek失败" << Time << ts << streamIdx;

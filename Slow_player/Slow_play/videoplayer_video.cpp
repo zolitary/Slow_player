@@ -155,6 +155,7 @@ void VideoPlayer::decodeVideo() {
             if (_hasAudio) {
                 // 等待音频包同步
                 while (_vTime > _aTime && _state == Playing) {
+                    qDebug()<<"wait";
                 }
             } else {
                 //只有视频没有音频时候  时间基准处理
@@ -191,7 +192,7 @@ void VideoPlayer::decodeVideo() {
 #endif
             emit frameDecoded(this, data, _vSwsOutSpec);
             //if(_vSwsInFrame->key_frame)
-                //qDebug() << "渲染了一帧" << _vTime << _aTime;
+            qDebug() << "渲染了一帧" << _vTime << _aTime;
         }
     }
 }
