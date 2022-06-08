@@ -159,7 +159,7 @@ void VideoPlayer::decodeVideo() {
                 }
             } else {
                 //只有视频没有音频时候  时间基准处理
-                _sleep(1000/frameRate);
+                //_sleep(1000/frameRate);
             }
 
             // 把像素格式转换后的图片数据，拷贝一份出来

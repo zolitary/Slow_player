@@ -456,10 +456,10 @@ void MainWindow::on_addFileBtn_clicked()
         }
     }
 
-    _player->setFilename(filePath);
-    _player->play();
-    preview_player->setFilename(filePath);
-    preview_player->play_preview();
+//    _player->setFilename(filePath);
+//    _player->play();
+//    preview_player->setFilename(filePath);
+//    preview_player->play_preview();
 }
 
 
